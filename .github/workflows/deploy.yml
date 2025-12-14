@@ -1,0 +1,62 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [main, master]
+    tags:
+      - "v*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Type check
+        run: npm run type-check
+
+      - name: Build project
+        run: npm run build
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Build Docker images
+        run: |
+          echo "Docker build step - to be implemented when backend is ready"
+          # docker build -t webvitals-frontend:latest ./frontend
+          # docker build -t webvitals-backend:latest ./backend
+
+      - name: Deploy to AWS
+        run: |
+          echo "Deployment step - to be implemented"
+          # aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ECR_URI }}
+          # docker tag webvitals-frontend:latest ${{ secrets.AWS_ECR_URI }}/webvitals-frontend:latest
+          # docker push ${{ secrets.AWS_ECR_URI }}/webvitals-frontend:latest
+
