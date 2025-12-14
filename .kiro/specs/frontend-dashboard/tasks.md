@@ -30,7 +30,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: `npm run lint` and `npm run format:check` pass
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 1.2 Install core dependencies
+- [x] 1.2 Install core dependencies
   - Install Redux: `npm install @reduxjs/toolkit react-redux redux-persist`
   - Install React Query: `npm install @tanstack/react-query @tanstack/react-query-devtools`
   - Install form libraries: `npm install react-hook-form zod @hookform/resolvers`
