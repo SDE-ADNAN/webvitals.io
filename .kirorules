@@ -1,0 +1,33 @@
+# WebVitals.io Development Rules for AWS Kiro IDE
+
+## Project Context
+- Name: WebVitals.io
+- Type: Full-Stack SaaS (Next.js + Node.js + PostgreSQL)
+- Timeline: 4 weeks
+- AWS Integration: Yes (CodeCommit, CodePipeline, EC2, RDS)
+
+## Kiro IDE Instructions
+1. Auto-push all commits to AWS CodeCommit
+2. Trigger CodePipeline on each push
+3. Deploy to EC2 instance on main branch
+4. Use RDS for PostgreSQL (not local)
+5. Store secrets in AWS Secrets Manager
+
+## Development Process
+- Follow PRD in /docs/PRD.md exactly
+- Use Amazon Q (Kiro's AI) for code generation
+- Each milestone generates one set of commits
+- All commits auto-push to CodeCommit
+
+## Tech Stack
+- Frontend: Next.js 15, React 19, TypeScript, Redux, Recharts, Tailwind
+- Backend: Node.js 20, Express, TypeScript, Prisma, PostgreSQL
+- AWS: CodeCommit, CodePipeline, CodeBuild, EC2, RDS, Secrets Manager
+- Testing: Jest, Supertest
+
+## AWS Infrastructure
+- RDS PostgreSQL: Auto-provisioned
+- EC2 Instance: t3.micro (free tier eligible)
+- CodeCommit: Git repository
+- CodePipeline: Auto-triggered on push
+- Secrets Manager: Store API keys, DB passwords
