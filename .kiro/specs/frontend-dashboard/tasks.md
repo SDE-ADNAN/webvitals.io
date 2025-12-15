@@ -14,7 +14,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.1: Project Scaffolding & Configuration
 
-- [-] 1. Initialize Next.js 15 project with TypeScript and Tailwind CSS
+- [x] 1. Initialize Next.js 15 project with TypeScript and Tailwind CSS
   - Run `npx create-next-app@latest webvitals-dashboard --typescript --tailwind --app --no-src-dir`
   - Verify project structure uses App Router (app/ directory)
   - Confirm TypeScript strict mode is enabled in tsconfig.json
@@ -48,7 +48,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Environment variables load correctly on app start
   - _Requirements: 17.1, 17.2, 17.3, 17.5_
 
-- [ ] 1.4 Configure Git repository
+- [x] 1.4 Configure Git repository
   - Initialize git: `git init`
   - Update `.gitignore` to exclude node_modules, .env files, .next, build artifacts
   - Create initial commit
@@ -56,7 +56,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Verify .gitignore patterns work correctly
   - _Requirements: 18.1, 18.5_
 
-- [ ] 1.5 Set up GitHub Actions CI/CD workflow
+- [x] 1.5 Set up GitHub Actions CI/CD workflow
   - Create `.github/workflows/ci.yml` for automated testing
   - Configure workflow to run on push and pull requests
   - Add steps: checkout, setup Node.js 20, install dependencies, lint, type-check, build
