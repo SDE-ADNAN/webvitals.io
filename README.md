@@ -133,8 +133,28 @@ WebVitals.io is a full-stack SaaS application built to provide real-time monitor
 - **Performance-optimized** with code splitting and lazy loading
 - **Mock data structured** to match future API responses exactly
 
+### Monorepo Architecture (Planned - Task 1.7)
+
+The project will migrate to a **Turborepo monorepo** structure to support:
+
+- **Multi-platform deployment**: Web (Next.js), Mobile (React Native), API (Express.js)
+- **Code sharing**: Shared types, utilities, and UI components across all platforms
+- **Independent deployments**: Each app can be deployed separately
+- **Unified tooling**: Consistent linting, formatting, and testing
+- **Build optimization**: Turborepo caching for faster builds
+
+**Workspace Structure:**
+- `apps/web` - Next.js frontend dashboard
+- `apps/api` - Express.js backend API (separate from Next.js for independent deployment)
+- `apps/mobile` - React Native app for iOS/Android
+- `packages/types` - Shared TypeScript types
+- `packages/ui` - Shared UI components
+- `packages/utils` - Shared utility functions
+- `packages/config` - Shared configuration files
+
 ## 📁 Project Structure
 
+### Current Structure (Week 1)
 ```
 webvitals-dashboard/
 ├── app/                          # Next.js App Router pages
@@ -159,54 +179,88 @@ webvitals-dashboard/
 │   └── globals.css              # Global styles
 ├── lib/                         # Utilities and libraries
 │   ├── redux/                   # Redux Toolkit setup
-│   │   ├── store.ts            # Redux store configuration
-│   │   ├── hooks.ts            # Typed Redux hooks
-│   │   └── slices/             # Redux slices (theme, user, ui)
 │   ├── react-query/            # React Query setup
-│   │   ├── queryClient.ts      # Query client configuration
-│   │   └── queries/            # Query hooks (useSites, useMetrics)
 │   ├── mock-data/              # Mock data for development
-│   │   ├── mockSites.ts        # Mock site data
-│   │   ├── mockMetrics.ts      # Mock metrics generator
-│   │   └── types.ts            # Mock data types
 │   ├── api/                    # API client
-│   │   └── client.ts           # Axios instance with interceptors
 │   ├── utils/                  # Utility functions
-│   │   ├── metrics.ts          # Metric threshold utilities
-│   │   └── formatters.ts       # Formatting utilities
 │   ├── validations/            # Validation schemas
-│   │   └── schemas.ts          # Zod schemas for forms
 │   └── config/                 # Configuration
-│       └── env.ts              # Environment variable validation
 ├── types/                       # TypeScript type definitions
-│   ├── site.ts                 # Site types
-│   ├── metric.ts               # Metric types
-│   ├── user.ts                 # User types
-│   └── index.ts                # Type exports
 ├── public/                      # Static assets
 ├── docs/                        # Documentation
-│   └── PRD.md                  # Product Requirements Document
 ├── .kiro/                       # Kiro specs and configuration
-│   └── specs/                  # Feature specifications
-│       └── frontend-dashboard/ # Frontend dashboard spec
 ├── .github/                     # GitHub workflows
-│   └── workflows/              # CI/CD pipelines
-│       └── ci.yml              # Continuous integration workflow
-├── scripts/                     # Utility scripts
-│   └── test-env.ts             # Environment variable testing
-├── .env.example                 # Example environment variables
-├── .env.local                   # Local environment variables (gitignored)
-├── .eslintrc.json              # ESLint configuration
-├── .prettierrc.json            # Prettier configuration
-├── .prettierignore             # Prettier ignore patterns
-├── .gitignore                  # Git ignore patterns
-├── package.json                # Dependencies and scripts
-├── tsconfig.json               # TypeScript configuration
-├── tailwind.config.ts          # Tailwind CSS configuration
-├── next.config.js              # Next.js configuration
-├── postcss.config.js           # PostCSS configuration
-└── README.md                   # This file
+└── ...config files
 ```
+
+### Future Monorepo Structure (Task 1.7+)
+```
+webvitals-monorepo/
+├── apps/
+│   ├── web/                     # Next.js frontend dashboard
+│   │   ├── app/                # Next.js App Router pages
+│   │   ├── lib/                # Web-specific utilities
+│   │   ├── public/             # Static assets
+│   │   └── package.json        # Web app dependencies
+│   │
+│   ├── api/                     # Express.js backend API (separate deployment)
+│   │   ├── src/
+│   │   │   ├── routes/        # API routes
+│   │   │   ├── controllers/   # Request handlers
+│   │   │   ├── services/      # Business logic
+│   │   │   ├── middleware/    # Express middleware
+│   │   │   └── server.ts      # Express server entry
+│   │   └── package.json        # API dependencies
+│   │
+│   └── mobile/                  # React Native app (iOS/Android)
+│       ├── src/
+│       │   ├── screens/       # Mobile screens
+│       │   ├── components/    # Mobile components
+│       │   └── navigation/    # Navigation setup
+│       └── package.json        # Mobile app dependencies
+│
+├── packages/
+│   ├── types/                   # Shared TypeScript types
+│   │   ├── src/
+│   │   │   ├── site.ts
+│   │   │   ├── metric.ts
+│   │   │   ├── user.ts
+│   │   │   └── index.ts
+│   │   └── package.json
+│   │
+│   ├── ui/                      # Shared UI components
+│   │   ├── src/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   └── index.ts
+│   │   └── package.json
+│   │
+│   ├── utils/                   # Shared utility functions
+│   │   ├── src/
+│   │   │   ├── metrics.ts
+│   │   │   ├── formatters.ts
+│   │   │   └── index.ts
+│   │   └── package.json
+│   │
+│   └── config/                  # Shared configuration
+│       ├── eslint/             # ESLint configs
+│       ├── typescript/         # TypeScript configs
+│       ├── tailwind/           # Tailwind configs
+│       └── package.json
+│
+├── turbo.json                   # Turborepo pipeline configuration
+├── package.json                 # Root package.json with workspaces
+├── pnpm-workspace.yaml         # PNPM workspace configuration
+└── README.md                    # This file
+```
+
+**Benefits of Monorepo Structure:**
+- **Code Sharing**: Share types, utilities, and UI components across web, mobile, and API
+- **Independent Deployment**: Deploy web, API, and mobile apps separately
+- **Consistent Tooling**: Unified linting, formatting, and testing across all projects
+- **Faster Development**: Turborepo caching speeds up builds and tests
+- **Type Safety**: Shared types ensure consistency across platforms
+- **Scalability**: Easy to add new apps (admin panel, marketing site, etc.)
 
 ## 🚦 Getting Started
 
@@ -720,9 +774,11 @@ Node.js version requirements.
 - CI/CD pipeline with GitHub Actions
 - Environment configuration
 - Git repository structure
+- Comprehensive project documentation
 
 ### In Progress 🚧
 
+- **Monorepo/Turborepo migration** (Task 1.7 - Next Priority)
 - Core infrastructure and state management
 - Mock data and utilities
 - Base UI components
@@ -731,6 +787,8 @@ Node.js version requirements.
 
 ### Upcoming 📋
 
+- **Multi-platform support** (iOS/Android via React Native)
+- **Separate API deployment** (Express.js backend independent from Next.js)
 - Authentication system
 - Site management
 - Real-time metrics visualization

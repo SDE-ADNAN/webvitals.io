@@ -71,16 +71,40 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Follow README instructions in a fresh clone
   - _Requirements: 19.1, 19.2, 19.3, 19.4, 19.5_
 
+- [ ] 1.7 Set up Turborepo monorepo structure
+  - Install Turborepo: `npm install turbo --global` and `npx create-turbo@latest`
+  - Create monorepo structure with the following workspaces:
+    - `apps/web` - Next.js frontend dashboard (move current app here)
+    - `apps/api` - Express.js backend API server (separate from Next.js)
+    - `apps/mobile` - React Native app (placeholder for future iOS/Android)
+    - `packages/ui` - Shared UI components library
+    - `packages/types` - Shared TypeScript types and interfaces
+    - `packages/config` - Shared configuration (ESLint, TypeScript, Tailwind)
+    - `packages/utils` - Shared utility functions
+  - Create root `turbo.json` with pipeline configuration
+  - Update root `package.json` with workspace configuration
+  - Move existing Next.js app to `apps/web` directory
+  - Create `apps/api/package.json` for Express server
+  - Create `packages/types/package.json` for shared types
+  - Create `packages/config/package.json` for shared configs
+  - Update all import paths to use workspace references
+  - Configure build pipeline: `turbo run build`
+  - Configure dev pipeline: `turbo run dev`
+  - Test: `turbo run build` builds all workspaces successfully
+  - Test: `turbo run dev` starts all dev servers
+  - _Requirements: Project scalability, multi-platform support_
+
 ---
 
 ## Milestone 1.2: Core Infrastructure & State Management
 
 - [ ] 2. Set up TypeScript types and interfaces
-  - Create `types/site.ts` with Site interface matching Prisma schema
-  - Create `types/metric.ts` with Metric and MetricSummary interfaces
-  - Create `types/user.ts` with User and AuthState interfaces
-  - Create `types/index.ts` to export all types
-  - Test: Import types in other files without errors
+  - Create `packages/types/src/site.ts` with Site interface matching Prisma schema
+  - Create `packages/types/src/metric.ts` with Metric and MetricSummary interfaces
+  - Create `packages/types/src/user.ts` with User and AuthState interfaces
+  - Create `packages/types/src/index.ts` to export all types
+  - Configure package exports in `packages/types/package.json`
+  - Test: Import types in web app without errors
   - _Requirements: 27.1_
 
 - [ ] 2.1 Configure Redux Toolkit store
