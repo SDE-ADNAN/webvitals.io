@@ -17,14 +17,17 @@
 ## 1. PROJECT OVERVIEW
 
 ### 1.1 Vision
+
 Build a **lightweight, real-time web performance monitoring SaaS** that enables indie developers, freelancers, and small agencies to track Core Web Vitals without the enterprise overhead of tools like Datadog or New Relic.
 
 ### 1.2 Target Market
+
 - **Primary:** Indie developers and freelancers ($0-$500/month budget)
 - **Secondary:** Small agencies (1-10 developers)
 - **Tertiary:** Startups in Series A/B phase looking for cost-effective monitoring
 
 ### 1.3 Unique Value Proposition
+
 - **50-70% cheaper** than competitors (Datadog, New Relic, Sentry)
 - **Real-time** metric streaming via WebSockets
 - **Zero configuration** - Single script tag to embed
@@ -32,6 +35,7 @@ Build a **lightweight, real-time web performance monitoring SaaS** that enables 
 - **Open-source SDK** - Full transparency and community contributions
 
 ### 1.4 Success Metrics
+
 - MVP launched and live by January 11, 2026
 - 50+ GitHub stars by February 2026
 - 20+ beta users by February 2026
@@ -103,6 +107,7 @@ Build a **lightweight, real-time web performance monitoring SaaS** that enables 
 ### 2.2 Tech Stack
 
 **Frontend:**
+
 - Next.js 15 (App Router, SSR, SSG)
 - React 19
 - TypeScript
@@ -114,6 +119,7 @@ Build a **lightweight, real-time web performance monitoring SaaS** that enables 
 - Zod (Form Validation)
 
 **Backend:**
+
 - Node.js 20 (LTS)
 - Express.js 4.x
 - TypeScript
@@ -127,6 +133,7 @@ Build a **lightweight, real-time web performance monitoring SaaS** that enables 
 - Zod (Input Validation)
 
 **DevOps & Infrastructure:**
+
 - Docker & Docker Compose
 - GitHub Actions (CI/CD)
 - AWS EC2 (Backend Hosting)
@@ -137,6 +144,7 @@ Build a **lightweight, real-time web performance monitoring SaaS** that enables 
 - Let's Encrypt (SSL/TLS)
 
 **Additional Tools:**
+
 - Git & GitHub
 - ESLint & Prettier
 - Jest (Unit Testing)
@@ -171,12 +179,12 @@ model User {
   avatar        String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
+
   // Relations
   sites         Site[]
   apiKeys       ApiKey[]
   alerts        Alert[]
-  
+
   @@index([email])
 }
 
@@ -189,9 +197,9 @@ model ApiKey {
   lastUsedAt    DateTime?
   createdAt     DateTime  @default(now())
   expiresAt     DateTime?
-  
+
   user          User      @relation(fields: [userId], onDelete: Cascade)
-  
+
   @@index([userId])
 }
 
@@ -206,13 +214,13 @@ model Site {
   isActive      Boolean   @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
+
   // Relations
   user          User      @relation(fields: [userId], onDelete: Cascade)
   metrics       Metric[]
   alertRules    AlertRule[]
   alerts        Alert[]
-  
+
   @@index([userId])
   @@index([siteId])
   @@unique([userId, domain])
@@ -222,40 +230,40 @@ model Site {
 model Metric {
   id            Int       @id @default(autoincrement())
   siteId        Int
-  
+
   // Core Web Vitals
   lcp           Float?    // Largest Contentful Paint (milliseconds)
   fid           Float?    // First Input Delay (milliseconds)
   cls           Float?    // Cumulative Layout Shift (0-1 score)
-  
+
   // Additional Vitals
   ttfb          Float?    // Time to First Byte (milliseconds)
   fcp           Float?    // First Contentful Paint (milliseconds)
   tti           Float?    // Time to Interactive (milliseconds)
-  
+
   // Device & Browser Info
   deviceType    String    // "mobile" | "desktop" | "tablet"
   browserName   String?   // "Chrome", "Firefox", "Safari"
   osName        String?   // "Windows", "macOS", "Linux", "iOS", "Android"
-  
+
   // Page Info
   pageUrl       String?   // Full page URL
   pageTitle     String?   // Page title
-  
+
   // Network Info
   connectionType String?  // "4g", "3g", "wifi", "slow-2g"
   effectiveType String?   // "4g", "3g", "2g", "slow-4g"
   rtt           Int?      // Round-trip time (milliseconds)
   downlink      Float?    // Download speed (Mbps)
-  
+
   // Metadata
   sessionId     String?   // Session tracking
   userId        String?   // Anonymous user ID (if provided)
   timestamp     DateTime  @default(now())
-  
+
   // Relations
   site          Site      @relation(fields: [siteId], onDelete: Cascade)
-  
+
   @@index([siteId, timestamp])
   @@index([timestamp])
   @@index([deviceType])
@@ -267,26 +275,26 @@ model AlertRule {
   id            Int       @id @default(autoincrement())
   siteId        Int
   userId        Int
-  
+
   // Alert Configuration
   metricType    String    // "lcp", "fid", "cls", "ttfb", "fcp"
   operator      String    // "greater_than", "less_than", "equals"
   threshold     Float     // Threshold value
-  
+
   // Conditions
   deviceType    String?   // Optional filter: "mobile", "desktop", etc.
   minOccurrences Int      @default(3) // Alert only if threshold crossed 3+ times
-  
+
   // Status
   isEnabled     Boolean   @default(true)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
+
   // Relations
   site          Site      @relation(fields: [siteId], onDelete: Cascade)
   user          User      @relation(fields: [userId], onDelete: Cascade)
   alerts        Alert[]
-  
+
   @@index([siteId])
   @@index([userId])
 }
@@ -297,29 +305,29 @@ model Alert {
   siteId        Int
   userId        Int
   alertRuleId   Int
-  
+
   // Alert Details
   metricValue   Float
   thresholdValue Float
   severity      String    // "warning" | "critical"
   message       String
-  
+
   // Status
   status        String    @default("open") // "open", "acknowledged", "resolved"
   acknowledgedAt DateTime?
   resolvedAt    DateTime?
-  
+
   // Email Status
   emailSent     Boolean   @default(false)
   emailSentAt   DateTime?
-  
+
   createdAt     DateTime  @default(now())
-  
+
   // Relations
   site          Site      @relation(fields: [siteId], onDelete: Cascade)
   user          User      @relation(fields: [userId], onDelete: Cascade)
   alertRule     AlertRule @relation(fields: [alertRuleId], onDelete: Cascade)
-  
+
   @@index([siteId, createdAt])
   @@index([userId])
   @@index([status])
@@ -336,7 +344,7 @@ model AuditLog {
   ipAddress     String?
   userAgent     String?
   timestamp     DateTime  @default(now())
-  
+
   @@index([userId, timestamp])
   @@index([action])
 }
@@ -356,8 +364,8 @@ CREATE INDEX idx_site_user_domain ON "Site"(userId, domain);
 
 -- Composite indexes for common queries
 CREATE INDEX idx_metrics_aggregation ON "Metric"(
-  siteId, 
-  timestamp DESC, 
+  siteId,
+  timestamp DESC,
   deviceType
 );
 ```
@@ -367,10 +375,13 @@ CREATE INDEX idx_metrics_aggregation ON "Metric"(
 ## 4. PROJECT TIMELINE & MILESTONES
 
 ### WEEK 1: Frontend Dashboard & Infrastructure Setup
+
 **Duration:** 7 Days (Dec 14 - Dec 20, 2025)
 
 #### Milestone 1.1: Project Scaffolding & Git Setup (Day 1)
+
 **Commits:**
+
 ```
 git commit -m "init: scaffold Next.js project with TypeScript and Tailwind"
 git commit -m "docs: add project README with architecture overview"
@@ -379,6 +390,7 @@ git commit -m "ci: configure GitHub Actions workflow template"
 ```
 
 **Deliverables:**
+
 - ✅ Next.js 15 project initialized with TypeScript
 - ✅ Tailwind CSS configured
 - ✅ ESLint & Prettier setup
@@ -386,6 +398,7 @@ git commit -m "ci: configure GitHub Actions workflow template"
 - ✅ GitHub Actions workflow template created
 
 **Tasks:**
+
 1. Run: `npx create-next-app@latest webvitals-dashboard --typescript --tailwind`
 2. Add Prettier config: `.prettierrc.json`
 3. Add ESLint config for TypeScript
@@ -395,6 +408,7 @@ git commit -m "ci: configure GitHub Actions workflow template"
 7. Create GitHub Actions template (.github/workflows/test.yml)
 
 **Success Criteria:**
+
 - Project runs locally: `npm run dev`
 - Linting passes: `npm run lint`
 - Format check passes: `npm run format:check`
@@ -402,7 +416,9 @@ git commit -m "ci: configure GitHub Actions workflow template"
 ---
 
 #### Milestone 1.2: Layout & Navigation Components (Day 2-3)
+
 **Commits:**
+
 ```
 git commit -m "feat: create base layout with sidebar and header"
 git commit -m "feat: add navigation menu with active state tracking"
@@ -411,6 +427,7 @@ git commit -m "feat: add responsive mobile navigation"
 ```
 
 **Deliverables:**
+
 - ✅ Main layout wrapper component
 - ✅ Sidebar navigation
 - ✅ Top header/navbar
@@ -418,6 +435,7 @@ git commit -m "feat: add responsive mobile navigation"
 - ✅ Mobile responsive design
 
 **Components to Create:**
+
 ```
 app/
 ├── components/
@@ -435,6 +453,7 @@ app/
 ```
 
 **Success Criteria:**
+
 - Layout renders without errors
 - Theme toggle works (stores preference in localStorage)
 - Mobile navigation visible on screens < 768px
@@ -443,7 +462,9 @@ app/
 ---
 
 #### Milestone 1.3: Dashboard Landing Page (Day 4-5)
+
 **Commits:**
+
 ```
 git commit -m "feat: create dashboard page with site overview cards"
 git commit -m "feat: add mock data for demonstration"
@@ -452,12 +473,14 @@ git commit -m "feat: add 'Add New Site' button with modal"
 ```
 
 **Deliverables:**
+
 - ✅ Dashboard landing page
 - ✅ Site overview cards (mock data)
 - ✅ Empty state UI for new users
 - ✅ "Add New Site" button & modal dialog
 
 **Page Structure:**
+
 ```
 app/dashboard/
 ├── page.tsx (main dashboard)
@@ -469,6 +492,7 @@ app/dashboard/
 ```
 
 **Mock Data:**
+
 ```typescript
 const mockSites = [
   {
@@ -476,12 +500,13 @@ const mockSites = [
     name: "My Blog",
     url: "https://myblog.com",
     status: "active",
-    lastMetric: { lcp: 1.2, fid: 50, cls: 0.05 }
-  }
+    lastMetric: { lcp: 1.2, fid: 50, cls: 0.05 },
+  },
 ];
 ```
 
 **Success Criteria:**
+
 - Dashboard page displays correctly
 - Mock sites render in cards
 - Empty state shows when no sites
@@ -490,7 +515,9 @@ const mockSites = [
 ---
 
 #### Milestone 1.4: Site Details & Metrics Dashboard (Day 6-7)
+
 **Commits:**
+
 ```
 git commit -m "feat: create site details page with metric visualizations"
 git commit -m "feat: add Recharts for Core Web Vitals charts"
@@ -500,6 +527,7 @@ git commit -m "feat: add metric filters (device type, browser)"
 ```
 
 **Deliverables:**
+
 - ✅ Site details page with drill-down analytics
 - ✅ Recharts visualizations for LCP, FID, CLS
 - ✅ Metric value cards with trend indicators
@@ -507,6 +535,7 @@ git commit -m "feat: add metric filters (device type, browser)"
 - ✅ Device/Browser filter UI
 
 **Page Structure:**
+
 ```
 app/dashboard/[siteId]/
 ├── page.tsx (main site details)
@@ -521,12 +550,14 @@ app/dashboard/[siteId]/
 ```
 
 **Charts to Implement:**
+
 - Line chart for LCP over time
 - Bar chart for FID distribution
 - Area chart for CLS progression
 - Device/Browser breakdown pie chart
 
 **Success Criteria:**
+
 - Charts render with mock data
 - Time range selector updates charts
 - Filters update displayed data
@@ -535,10 +566,13 @@ app/dashboard/[siteId]/
 ---
 
 ### WEEK 2: Authentication, Settings & Integration Prep
+
 **Duration:** 7 Days (Dec 21 - Dec 27, 2025)
 
 #### Milestone 2.1: Authentication Pages (Day 1-2)
+
 **Commits:**
+
 ```
 git commit -m "feat: create login page with form validation"
 git commit -m "feat: create signup page with email validation"
@@ -547,6 +581,7 @@ git commit -m "feat: implement middleware for route protection"
 ```
 
 **Deliverables:**
+
 - ✅ Login page with email/password form
 - ✅ Signup page with validation
 - ✅ Forgot password page
@@ -554,6 +589,7 @@ git commit -m "feat: implement middleware for route protection"
 - ✅ Session state management (Redux)
 
 **Pages to Create:**
+
 ```
 app/auth/
 ├── login/page.tsx
@@ -567,11 +603,13 @@ app/auth/
 ```
 
 **Form Validation:**
+
 - Use Zod for schema validation
 - Client-side validation with error messages
 - Backend validation prep (no backend yet)
 
 **Success Criteria:**
+
 - Forms validate input correctly
 - Error messages display
 - Forms submit without errors (mock submission)
@@ -580,7 +618,9 @@ app/auth/
 ---
 
 #### Milestone 2.2: Settings Pages (Day 3-4)
+
 **Commits:**
+
 ```
 git commit -m "feat: create user settings page"
 git commit -m "feat: add profile management section"
@@ -589,12 +629,14 @@ git commit -m "feat: create API key management panel"
 ```
 
 **Deliverables:**
+
 - ✅ User profile settings
 - ✅ Account preferences
 - ✅ API key management UI
 - ✅ Notification preferences
 
 **Pages to Create:**
+
 ```
 app/dashboard/settings/
 ├── page.tsx
@@ -608,6 +650,7 @@ app/dashboard/settings/
 ```
 
 **Success Criteria:**
+
 - Settings pages render correctly
 - Forms handle input (mock submission)
 - API key manager UI works
@@ -616,7 +659,9 @@ app/dashboard/settings/
 ---
 
 #### Milestone 2.3: Alerts Configuration Page (Day 5-6)
+
 **Commits:**
+
 ```
 git commit -m "feat: create alerts configuration page"
 git commit -m "feat: add alert rule builder UI"
@@ -626,6 +671,7 @@ git commit -m "feat: create alert history table"
 ```
 
 **Deliverables:**
+
 - ✅ Alert rules management page
 - ✅ Alert rule builder form
 - ✅ Threshold configuration UI
@@ -633,6 +679,7 @@ git commit -m "feat: create alert history table"
 - ✅ Delete/Edit alert rules
 
 **Pages to Create:**
+
 ```
 app/dashboard/alerts/
 ├── page.tsx
@@ -645,6 +692,7 @@ app/dashboard/alerts/
 ```
 
 **Success Criteria:**
+
 - Alert rule form submits without error
 - Rules display in table
 - Can edit/delete rules (UI only)
@@ -653,7 +701,9 @@ app/dashboard/alerts/
 ---
 
 #### Milestone 2.4: Billing & Pricing Page (Day 7)
+
 **Commits:**
+
 ```
 git commit -m "feat: create pricing page with feature comparison"
 git commit -m "feat: add pricing table and plans"
@@ -662,12 +712,14 @@ git commit -m "feat: add upgrade/downgrade UI buttons"
 ```
 
 **Deliverables:**
+
 - ✅ Pricing plans page (public)
 - ✅ Billing dashboard
 - ✅ Payment method management (UI only)
 - ✅ Invoice history table
 
 **Success Criteria:**
+
 - Pricing page renders correctly
 - Feature comparison table is clear
 - Billing dashboard shows mock data
@@ -676,10 +728,13 @@ git commit -m "feat: add upgrade/downgrade UI buttons"
 ---
 
 ### WEEK 3: Backend API & Database
+
 **Duration:** 7 Days (Dec 28 - Jan 3, 2026)
 
 #### Milestone 3.1: Backend Setup & Authentication (Day 1-2)
+
 **Commits:**
+
 ```
 git commit -m "init: initialize Express.js backend with TypeScript"
 git commit -m "setup: configure PostgreSQL connection with Prisma"
@@ -689,6 +744,7 @@ git commit -m "feat: create auth middleware and decorators"
 ```
 
 **Deliverables:**
+
 - ✅ Express.js server with TypeScript
 - ✅ Prisma ORM configured
 - ✅ PostgreSQL connection established
@@ -696,6 +752,7 @@ git commit -m "feat: create auth middleware and decorators"
 - ✅ Password hashing with bcrypt
 
 **Backend Structure:**
+
 ```
 backend/
 ├── src/
@@ -725,6 +782,7 @@ backend/
 ```
 
 **Success Criteria:**
+
 - Server runs on port 3000
 - Can connect to PostgreSQL
 - JWT token generation works
@@ -733,7 +791,9 @@ backend/
 ---
 
 #### Milestone 3.2: User & Site Management APIs (Day 3-4)
+
 **Commits:**
+
 ```
 git commit -m "feat: implement user registration endpoint"
 git commit -m "feat: implement user login endpoint"
@@ -746,6 +806,7 @@ git commit -m "feat: add input validation with Zod"
 **API Endpoints:**
 
 **Auth Routes:**
+
 ```
 POST   /api/auth/register
 POST   /api/auth/login
@@ -756,6 +817,7 @@ POST   /api/auth/reset-password
 ```
 
 **User Routes:**
+
 ```
 GET    /api/users/profile
 PUT    /api/users/profile
@@ -764,6 +826,7 @@ POST   /api/users/change-password
 ```
 
 **Site Routes:**
+
 ```
 GET    /api/sites
 POST   /api/sites
@@ -774,6 +837,7 @@ GET    /api/sites/:id/settings
 ```
 
 **Request/Response Examples:**
+
 ```typescript
 // POST /api/sites
 interface CreateSiteRequest {
@@ -791,6 +855,7 @@ interface CreateSiteResponse {
 ```
 
 **Success Criteria:**
+
 - All endpoints return correct HTTP status codes
 - Input validation works
 - Database records created/updated correctly
@@ -799,7 +864,9 @@ interface CreateSiteResponse {
 ---
 
 #### Milestone 3.3: Metrics Collection API (Day 5-6)
+
 **Commits:**
+
 ```
 git commit -m "feat: create POST /api/metrics endpoint"
 git commit -m "feat: implement bulk metrics ingestion"
@@ -810,6 +877,7 @@ git commit -m "feat: add device/browser filtering"
 ```
 
 **Metrics API Endpoints:**
+
 ```
 POST   /api/metrics                    # Receive metrics from tracker
 GET    /api/sites/:id/metrics          # Get historical metrics
@@ -818,10 +886,11 @@ GET    /api/sites/:id/metrics/chart    # Get chart data
 ```
 
 **Request/Response Examples:**
+
 ```typescript
 // POST /api/metrics
 interface MetricPayload {
-  siteId: string;        // Public site ID
+  siteId: string; // Public site ID
   lcp?: number;
   fid?: number;
   cls?: number;
@@ -832,7 +901,7 @@ interface MetricPayload {
   osName?: string;
   pageUrl?: string;
   connectionType?: string;
-  timestamp: number;     // Unix timestamp
+  timestamp: number; // Unix timestamp
 }
 
 // GET /api/sites/:id/metrics?range=24h&deviceType=mobile
@@ -850,6 +919,7 @@ interface MetricsResponse {
 ```
 
 **Success Criteria:**
+
 - Metrics endpoint accepts POST requests
 - Data stored correctly in PostgreSQL
 - Filtering and aggregation work
@@ -858,7 +928,9 @@ interface MetricsResponse {
 ---
 
 #### Milestone 3.4: Alert Management APIs (Day 7)
+
 **Commits:**
+
 ```
 git commit -m "feat: create POST /api/alert-rules endpoint"
 git commit -m "feat: implement alert rule validation"
@@ -869,6 +941,7 @@ git commit -m "feat: implement POST /api/alerts endpoint (create alert)"
 ```
 
 **Alert API Endpoints:**
+
 ```
 POST   /api/alert-rules
 GET    /api/alert-rules
@@ -882,6 +955,7 @@ PATCH  /api/alerts/:id/resolve
 ```
 
 **Success Criteria:**
+
 - Alert rules can be created/updated/deleted
 - Alerts are generated when metrics trigger rules
 - Email notifications prepared (not sent yet)
@@ -889,10 +963,13 @@ PATCH  /api/alerts/:id/resolve
 ---
 
 ### WEEK 4: WebSockets, Tracking SDK, DevOps & Deployment
+
 **Duration:** 7 Days (Jan 4 - Jan 10, 2026)
 
 #### Milestone 4.1: WebSocket Real-Time Updates (Day 1-2)
+
 **Commits:**
+
 ```
 git commit -m "feat: integrate Socket.io for real-time metrics"
 git commit -m "feat: implement room-based metric broadcasting"
@@ -902,6 +979,7 @@ git commit -m "feat: add reconnection handling with exponential backoff"
 ```
 
 **WebSocket Events:**
+
 ```
 Client → Server:
   - subscribe:site:{siteId}
@@ -917,20 +995,22 @@ Server → Client:
 ```
 
 **Implementation:**
+
 ```typescript
 // WebSocket server setup
-io.on('connection', (socket) => {
-  socket.on('subscribe:site', (siteId) => {
+io.on("connection", (socket) => {
+  socket.on("subscribe:site", (siteId) => {
     // Subscribe to site metrics room
     socket.join(`site:${siteId}`);
   });
 });
 
 // Broadcasting metrics
-io.to(`site:${siteId}`).emit('metric:received', metricData);
+io.to(`site:${siteId}`).emit("metric:received", metricData);
 ```
 
 **Success Criteria:**
+
 - Real-time updates received in frontend dashboard
 - Socket connection persists across page navigation
 - Reconnection works automatically
@@ -939,7 +1019,9 @@ io.to(`site:${siteId}`).emit('metric:received', metricData);
 ---
 
 #### Milestone 4.2: Tracking SDK Development (Day 3-4)
+
 **Commits:**
+
 ```
 git commit -m "feat: create vanilla JavaScript tracker.js SDK"
 git commit -m "feat: implement Core Web Vitals collection"
@@ -950,6 +1032,7 @@ git commit -m "feat: create SDK build process and minification"
 ```
 
 **Tracker SDK Structure:**
+
 ```
 tracker/
 ├── src/
@@ -967,12 +1050,14 @@ tracker/
 ```
 
 **SDK Usage (End Result):**
+
 ```html
 <!-- Users add this to their website -->
 <script src="https://webvitals.io/tracker.js?siteId=xxxxx"></script>
 ```
 
 **SDK Features:**
+
 - Measure LCP, FID, CLS automatically
 - Capture device/browser info
 - Send metrics every 10 seconds
@@ -981,6 +1066,7 @@ tracker/
 - Track custom events
 
 **Success Criteria:**
+
 - SDK file size < 5KB gzipped
 - Metrics collected accurately
 - Data sent to backend correctly
@@ -989,7 +1075,9 @@ tracker/
 ---
 
 #### Milestone 4.3: Dockerization & CI/CD Setup (Day 5-6)
+
 **Commits:**
+
 ```
 git commit -m "build: create Dockerfile for backend"
 git commit -m "build: create Dockerfile for frontend"
@@ -1002,6 +1090,7 @@ git commit -m "ci: configure AWS ECR integration"
 **Docker Configuration:**
 
 **Dockerfile.backend:**
+
 ```dockerfile
 FROM node:20-alpine
 
@@ -1020,6 +1109,7 @@ CMD ["npm", "start"]
 ```
 
 **Dockerfile.frontend:**
+
 ```dockerfile
 FROM node:20-alpine as builder
 
@@ -1039,8 +1129,9 @@ CMD ["nginx", "-g", "daemon off;"]
 ```
 
 **docker-compose.yml:**
+
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   postgres:
     image: postgres:15-alpine
@@ -1076,6 +1167,7 @@ services:
 ```
 
 **GitHub Actions Workflow (.github/workflows/deploy.yml):**
+
 ```yaml
 name: Deploy to AWS
 
@@ -1090,7 +1182,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
       - run: npm install
       - run: npm run lint
       - run: npm run test
@@ -1116,6 +1208,7 @@ jobs:
 ```
 
 **Success Criteria:**
+
 - Docker images build successfully
 - docker-compose up runs all services
 - GitHub Actions workflow executes without errors
@@ -1124,7 +1217,9 @@ jobs:
 ---
 
 #### Milestone 4.4: Frontend-Backend Integration (Day 7)
+
 **Commits:**
+
 ```
 git commit -m "feat: connect frontend to backend API"
 git commit -m "feat: integrate authentication with backend"
@@ -1135,6 +1230,7 @@ git commit -m "test: add integration tests for frontend-backend"
 ```
 
 **Integration Points:**
+
 - Login → Backend auth
 - Dashboard → Real metrics from API
 - Add Site → POST to backend
@@ -1143,17 +1239,18 @@ git commit -m "test: add integration tests for frontend-backend"
 - Real-time updates → WebSocket connection
 
 **API Client Setup:**
+
 ```typescript
 // lib/api-client.ts
-import axios from 'axios';
+import axios from "axios";
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: 10000
+  timeout: 10000,
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem("authToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -1164,6 +1261,7 @@ export default apiClient;
 ```
 
 **Success Criteria:**
+
 - Frontend loads real data from backend
 - Authentication persists across sessions
 - Real-time updates work end-to-end
@@ -1198,6 +1296,7 @@ main (production)
 ```
 
 **Types:**
+
 - `feat:` New feature
 - `fix:` Bug fix
 - `docs:` Documentation
@@ -1209,6 +1308,7 @@ main (production)
 - `perf:` Performance improvements
 
 **Examples:**
+
 ```
 feat(auth): implement JWT token refresh logic
 
@@ -1255,12 +1355,14 @@ Production (AWS Production Instance)
 ### 6.2 Deployment Process
 
 **Local Development:**
+
 ```bash
 docker-compose up -d
 # Access: http://localhost:3001
 ```
 
 **Staging Deployment:**
+
 ```bash
 git push origin feature-branch
 # GitHub Actions runs tests
@@ -1269,6 +1371,7 @@ git push origin feature-branch
 ```
 
 **Production Deployment:**
+
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
@@ -1295,6 +1398,7 @@ npx prisma migrate deploy --skip-generate
 ### 7.1 Frontend Testing
 
 **Unit Tests (Jest):**
+
 ```typescript
 // components/__tests__/SiteCard.test.tsx
 describe('SiteCard', () => {
@@ -1307,6 +1411,7 @@ describe('SiteCard', () => {
 ```
 
 **Integration Tests (React Testing Library):**
+
 ```typescript
 describe('Dashboard Integration', () => {
   it('loads and displays sites', async () => {
@@ -1321,15 +1426,16 @@ describe('Dashboard Integration', () => {
 ### 7.2 Backend Testing
 
 **API Tests (Supertest + Jest):**
+
 ```typescript
-describe('POST /api/sites', () => {
-  it('creates a new site', async () => {
+describe("POST /api/sites", () => {
+  it("creates a new site", async () => {
     const response = await request(app)
-      .post('/api/sites')
-      .set('Authorization', `Bearer ${token}`)
-      .send({ name: 'Test Site', url: 'https://test.com' })
+      .post("/api/sites")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ name: "Test Site", url: "https://test.com" })
       .expect(201);
-    
+
     expect(response.body.id).toBeDefined();
   });
 });
@@ -1402,28 +1508,30 @@ describe('POST /api/sites', () => {
 ### 10.1 Logging Strategy
 
 **Frontend:**
+
 ```typescript
 // Configure browser logging
-console.log('[METRICS]', metricData);
-console.error('[API_ERROR]', error);
+console.log("[METRICS]", metricData);
+console.error("[API_ERROR]", error);
 ```
 
 **Backend:**
+
 ```typescript
 // Configure Winston logger
-import winston from 'winston';
+import winston from "winston";
 
 const logger = winston.createLogger({
-  level: 'info',
+  level: "info",
   format: winston.format.json(),
   transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' })
-  ]
+    new winston.transports.File({ filename: "error.log", level: "error" }),
+    new winston.transports.File({ filename: "combined.log" }),
+  ],
 });
 
-logger.info('Server started on port 3000');
-logger.error('Database connection failed', error);
+logger.info("Server started on port 3000");
+logger.error("Database connection failed", error);
 ```
 
 ### 10.2 Metrics & Monitoring
@@ -1534,6 +1642,7 @@ aws rds restore-db-instance-from-db-snapshot ...
 ## 14. FUTURE ROADMAP (Post-MVP)
 
 ### Phase 2 (Month 2-3)
+
 - [ ] Email alert notifications
 - [ ] Slack integration
 - [ ] Advanced analytics (anomaly detection)
@@ -1541,6 +1650,7 @@ aws rds restore-db-instance-from-db-snapshot ...
 - [ ] Export reports (PDF/CSV)
 
 ### Phase 3 (Month 4-6)
+
 - [ ] GitHub integration
 - [ ] Zapier integration
 - [ ] Mobile app (React Native)
@@ -1548,6 +1658,7 @@ aws rds restore-db-instance-from-db-snapshot ...
 - [ ] Custom branding (white-label)
 
 ### Phase 4 (Month 6+)
+
 - [ ] AI-powered insights
 - [ ] Predictive alerts
 - [ ] Team collaboration features
@@ -1560,21 +1671,21 @@ aws rds restore-db-instance-from-db-snapshot ...
 
 ### 15.1 Technical Risks
 
-| Risk | Probability | Impact | Mitigation |
-| --- | --- | --- | --- |
-| Database scaling issues | Medium | High | Use RDS read replicas, implement caching |
-| WebSocket disconnections | Medium | Medium | Implement reconnection with backoff |
-| SDK conflicts with site code | Low | Medium | Use unique namespace, version isolation |
-| Data loss | Very Low | Critical | Daily automated backups, disaster recovery plan |
+| Risk                         | Probability | Impact   | Mitigation                                      |
+| ---------------------------- | ----------- | -------- | ----------------------------------------------- |
+| Database scaling issues      | Medium      | High     | Use RDS read replicas, implement caching        |
+| WebSocket disconnections     | Medium      | Medium   | Implement reconnection with backoff             |
+| SDK conflicts with site code | Low         | Medium   | Use unique namespace, version isolation         |
+| Data loss                    | Very Low    | Critical | Daily automated backups, disaster recovery plan |
 
 ### 15.2 Business Risks
 
-| Risk | Probability | Impact | Mitigation |
-| --- | --- | --- | --- |
-| Competitive pressure | High | Medium | Focus on developer experience, community |
-| User acquisition | Medium | High | Content marketing, partnerships, referrals |
-| Churn rate > 10% | Medium | High | Improve product based on feedback, support |
-| Payment processing issues | Low | High | Use Stripe for reliability, multiple payment methods |
+| Risk                      | Probability | Impact | Mitigation                                           |
+| ------------------------- | ----------- | ------ | ---------------------------------------------------- |
+| Competitive pressure      | High        | Medium | Focus on developer experience, community             |
+| User acquisition          | Medium      | High   | Content marketing, partnerships, referrals           |
+| Churn rate > 10%          | Medium      | High   | Improve product based on feedback, support           |
+| Payment processing issues | Low         | High   | Use Stripe for reliability, multiple payment methods |
 
 ---
 
@@ -1583,6 +1694,7 @@ aws rds restore-db-instance-from-db-snapshot ...
 This PRD provides a comprehensive roadmap for building WebVitals.io over 4 weeks. The project showcases full-stack expertise (frontend, backend, DevOps, performance optimization) and can be monetized immediately.
 
 **Key Deliverables:**
+
 1. ✅ Production-ready SaaS product
 2. ✅ Portfolio piece for freelance clients
 3. ✅ Potential revenue stream
@@ -1590,6 +1702,7 @@ This PRD provides a comprehensive roadmap for building WebVitals.io over 4 weeks
 5. ✅ Justification for $40+/hour rates
 
 **Next Steps:**
+
 1. Review and finalize PRD with team
 2. Set up Git repository and CI/CD
 3. Allocate resources and timeline

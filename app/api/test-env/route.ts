@@ -3,8 +3,8 @@
  * This can be accessed at /api/test-env
  */
 
-import { env } from '@/lib/config/env';
-import { NextResponse } from 'next/server';
+import { env } from "@/lib/config/env";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -21,15 +21,15 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      message: 'Environment configuration loaded successfully',
+      message: "Environment configuration loaded successfully",
       config,
     });
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: 'Failed to load environment configuration',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        message: "Failed to load environment configuration",
+        error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );
