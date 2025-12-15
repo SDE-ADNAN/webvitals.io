@@ -171,14 +171,14 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.3: Mock Data & Utilities
 
-- [ ] 3. Create mock data structure
+- [x] 3. Create mock data structure
   - Create `lib/mock-data/types.ts` with mock data interfaces
   - Create `lib/mock-data/mockSites.ts` with sample site data (2-3 sites)
   - Implement getMockSites() and getMockSite(siteId) with simulated delays
   - Test: Mock functions return data with correct structure
   - _Requirements: 16.1, 27.2, 27.4_
 
-- [ ] 3.1 Create mock metrics generator
+- [x] 3.1 Create mock metrics generator
   - Create `lib/mock-data/mockMetrics.ts`
   - Implement generateMockMetrics(siteId, count) function
   - Generate realistic LCP (1000-6000ms), FID (50-450ms), CLS (0-0.4) values
@@ -187,7 +187,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Generated metrics have all required properties
   - _Requirements: 16.2, 16.3, 16.4, 27.3_
 
-- [ ] 3.2 Write property tests for mock data generation
+- [x] 3.2 Write property tests for mock data generation
   - **Property 41: Mock Metric Value Ranges**
   - **Property 42: Time-Series Data Timestamps**
   - **Property 43: Mock Data Variety**
@@ -199,7 +199,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Configure to run 100 iterations each
   - _Requirements: 16.2, 16.3, 16.4_
 
-- [ ] 3.3 Implement metric utilities
+- [x] 3.3 Implement metric utilities
   - Create `lib/utils/metrics.ts`
   - Define METRIC_THRESHOLDS constants (LCP, FID, CLS, TTFB, FCP)
   - Implement getMetricStatus(metricType, value) function
@@ -207,7 +207,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Status classification works for all thresholds
   - _Requirements: 28.1, 28.2, 28.3, 28.4, 28.5, 28.6, 28.7, 28.8, 28.9_
 
-- [ ] 3.4 Write property tests for metric classification
+- [x] 3.4 Write property tests for metric classification
   - **Property 25: Good Metric Status Indicator**
   - **Property 26: Needs Improvement Metric Status Indicator**
   - **Property 27: Poor Metric Status Indicator**
@@ -220,7 +220,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Configure to run 100 iterations each
   - _Requirements: 12.2, 12.3, 12.4, 28.1-28.9_
 
-- [ ] 3.5 Create formatting utilities
+- [x] 3.5 Create formatting utilities
   - Create `lib/utils/formatters.ts`
   - Implement formatMetricValue(value, unit) for display
   - Implement formatTimestamp(timestamp) for dates
@@ -228,7 +228,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Formatters produce correct output
   - _Requirements: 12.1_
 
-- [ ] 3.6 Create form validation schemas
+- [x] 3.6 Create form validation schemas
   - Create `lib/validations/schemas.ts`
   - Define siteSchema with Zod (name: 3-50 chars, url: valid URL pattern)
   - Define loginSchema (email, password min 8 chars)
