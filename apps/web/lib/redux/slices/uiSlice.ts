@@ -37,6 +37,7 @@ export const { toggleSidebar, toggleMobileMenu, openModal, closeModal } =
 
 // Selectors
 export const selectSidebarOpen = (state: RootState) => state.ui.sidebarOpen;
+export const selectMobileMenuOpen = (state: RootState) => state.ui.mobileMenuOpen;
 export const selectActiveModal = (state: RootState) => state.ui.activeModal;
 
 export default uiSlice.reducer;

@@ -33,7 +33,7 @@ async function testTask4Components() {
   try {
     const { ErrorBoundary } = await import("../app/components/UI/ErrorBoundary");
     console.log(`   ✓ ErrorBoundary: ${typeof ErrorBoundary === "function" ? "Exported" : "Missing"}`);
-    console.log(`   ✓ Component type: ${ErrorBoundary.prototype?.componentDidCatch ? "Class Component" : "Unknown"}\n`);
+    console.log(`   ✓ Component type: ${typeof ErrorBoundary.prototype?.componentDidCatch === "function" ? "Class Component" : "Unknown"}\n`);
   } catch (error) {
     console.log(`   ✗ Error importing ErrorBoundary: ${error}\n`);
   }

@@ -333,7 +333,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.6: Layout Components
 
-- [ ] 6. Create ThemeToggle component
+- [x] 6. Create ThemeToggle component
   - Create `app/components/Theme/ThemeToggle.tsx`
   - Connect to Redux theme slice
   - Display sun/moon icon based on current theme
@@ -342,7 +342,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Theme toggles and persists
   - _Requirements: 5.1, 5.2, 5.5_
 
-- [ ] 6.1 Create Sidebar component
+- [x] 6.1 Create Sidebar component
   - Create `app/components/Layout/Sidebar.tsx`
   - Display navigation links: Dashboard, Sites, Alerts, Settings
   - Highlight active route using usePathname()
@@ -351,7 +351,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Sidebar renders and highlights active route
   - _Requirements: 4.1, 4.3, 4.4_
 
-- [ ] 6.2 Create Header component
+- [x] 6.2 Create Header component
   - Create `app/components/Layout/Header.tsx`
   - Display page title (dynamic based on route)
   - Include ThemeToggle button
@@ -360,7 +360,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Header renders correctly
   - _Requirements: 4.2_
 
-- [ ] 6.3 Create MobileNav component
+- [x] 6.3 Create MobileNav component
   - Create `app/components/Layout/MobileNav.tsx`
   - Implement drawer that slides in from left
   - Display all navigation links vertically
@@ -369,7 +369,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Mobile nav opens, closes, and displays links
   - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-- [ ] 6.4 Create MainLayout component
+- [x] 6.4 Create MainLayout component
   - Create `app/components/Layout/MainLayout.tsx`
   - Combine Sidebar, Header, and main content area
   - Handle responsive layout (sidebar hidden on mobile)
@@ -377,7 +377,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Layout renders correctly on all screen sizes
   - _Requirements: 4.1, 4.2, 4.3, 15.1, 15.2, 15.3_
 
-- [ ] 6.5 Update root layout
+- [x] 6.5 Update root layout
   - Update `app/layout.tsx` to include Providers
   - Add theme class to html element based on Redux state
   - Include skip-to-content link for accessibility
@@ -385,7 +385,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Root layout renders without errors
   - _Requirements: 5.2, 26.1_
 
-- [ ] 6.6 Create dashboard layout
+- [x] 6.6 Create dashboard layout
   - Create `app/dashboard/layout.tsx`
   - Use MainLayout component
   - Add route protection (redirect if not authenticated)
