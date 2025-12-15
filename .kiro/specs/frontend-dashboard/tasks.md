@@ -396,7 +396,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.7: Dashboard Overview Page
 
-- [ ] 7. Create SiteCard component
+- [x] 7. Create SiteCard component
   - Create `app/components/Dashboard/SiteCard.tsx`
   - Display site name, URL, and siteId
   - Show latest LCP, FID, CLS values with color-coded badges
@@ -406,7 +406,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Card renders with mock data
   - _Requirements: 7.2, 7.5, 12.1, 12.2, 12.3, 12.4_
 
-- [ ] 7.1 Write unit tests for SiteCard
+- [x] 7.1 Write unit tests for SiteCard
   - Create `app/components/Dashboard/SiteCard.test.tsx`
   - Test site name and URL render correctly
   - Test metric badges display with correct colors
@@ -414,14 +414,14 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test ARIA labels are present
   - _Requirements: 7.2_
 
-- [ ] 7.2 Create SiteOverviewGrid component
+- [x] 7.2 Create SiteOverviewGrid component
   - Create `app/components/Dashboard/SiteOverviewGrid.tsx`
   - Display sites in responsive grid (1 col mobile, 2 col tablet, 3 col desktop)
   - Map over sites array and render SiteCard for each
   - Test: Grid renders multiple site cards
   - _Requirements: 7.1, 15.1, 15.2, 15.3_
 
-- [ ] 7.3 Create EmptyState component
+- [x] 7.3 Create EmptyState component
   - Create `app/components/Dashboard/EmptyState.tsx`
   - Display illustration or icon
   - Show heading: "No sites configured"
@@ -430,7 +430,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Empty state renders correctly
   - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
-- [ ] 7.4 Create AddSiteModal component
+- [x] 7.4 Create AddSiteModal component
   - Create `app/components/Dashboard/AddSiteModal.tsx`
   - Use Modal component as base
   - Create form with react-hook-form and Zod validation
@@ -440,7 +440,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Modal opens, validates, and submits
   - _Requirements: 8.2, 8.3, 8.4, 23.2, 23.3, 23.4, 23.5_
 
-- [ ] 7.5 Implement dashboard page
+- [x] 7.5 Implement dashboard page
   - Create `app/dashboard/page.tsx`
   - Use useSites() hook to fetch sites
   - Show CardSkeleton while loading

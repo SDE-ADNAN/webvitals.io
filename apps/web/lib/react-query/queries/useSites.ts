@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getMockSites, getMockSite } from "../../mock-data/mockSites";
-import type { Site } from "@webvitals/types";
+import { getMockSites, getMockSite, type SiteWithMetrics } from "../../mock-data/mockSites";
 
 /**
  * React Query hook to fetch all sites
@@ -12,7 +11,7 @@ import type { Site } from "@webvitals/types";
  * @returns React Query result with sites array
  */
 export function useSites() {
-  return useQuery<Site[], Error>({
+  return useQuery<SiteWithMetrics[], Error>({
     queryKey: ["sites"],
     queryFn: async () => {
       // Week 1: Return mock data
@@ -35,7 +34,7 @@ export function useSites() {
  * @returns React Query result with site or null
  */
 export function useSite(siteId: string) {
-  return useQuery<Site | null, Error>({
+  return useQuery<SiteWithMetrics | null, Error>({
     queryKey: ["sites", siteId],
     queryFn: async () => {
       // Week 1: Return mock data
