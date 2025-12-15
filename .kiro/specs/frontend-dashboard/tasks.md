@@ -241,7 +241,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.4: API Client & React Query Hooks
 
-- [ ] 4. Set up Axios API client
+- [x] 4. Set up Axios API client
   - Create `lib/api/client.ts` with Axios instance
   - Configure baseURL from environment variables
   - Add request interceptor to include auth token
@@ -250,7 +250,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: API client initializes correctly
   - _Requirements: 25.1, 25.2, 25.3, 25.4, 25.5_
 
-- [ ] 4.1 Create React Query hooks for sites
+- [x] 4.1 Create React Query hooks for sites
   - Create `lib/react-query/queries/useSites.ts`
   - Implement useSites() hook calling getMockSites()
   - Implement useSite(siteId) hook calling getMockSite()
@@ -258,7 +258,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Hooks return data correctly
   - _Requirements: 7.1, 10.1_
 
-- [ ] 4.2 Create React Query hooks for metrics
+- [x] 4.2 Create React Query hooks for metrics
   - Create `lib/react-query/queries/useMetrics.ts`
   - Implement useMetrics(siteId, filters) hook
   - Call getMockMetrics() with filters
@@ -267,14 +267,14 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Hooks return filtered data correctly
   - _Requirements: 11.1, 13.2, 14.2, 14.3_
 
-- [ ] 4.3 Create error boundary component
+- [x] 4.3 Create error boundary component
   - Create `app/components/UI/ErrorBoundary.tsx`
   - Implement componentDidCatch to log errors
   - Display fallback UI with retry button
   - Test: Error boundary catches and displays errors
   - _Requirements: 22.3_
 
-- [ ] 4.4 Create skeleton loading components
+- [x] 4.4 Create skeleton loading components
   - Create `app/components/UI/Skeleton.tsx`
   - Implement CardSkeleton component
   - Implement ChartSkeleton component

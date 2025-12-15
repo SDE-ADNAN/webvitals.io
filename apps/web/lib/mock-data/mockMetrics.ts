@@ -42,9 +42,9 @@ export function generateMockMetrics(
     const tti = Math.random() * 7000 + 1000;
 
     // Randomly select device type, browser, and OS
-    const deviceType = deviceTypes[Math.floor(Math.random() * deviceTypes.length)];
-    const browserName = browsers[Math.floor(Math.random() * browsers.length)];
-    const osName = osNames[Math.floor(Math.random() * osNames.length)];
+    const deviceType = deviceTypes[Math.floor(Math.random() * deviceTypes.length)] as "mobile" | "desktop" | "tablet";
+    const browserName = browsers[Math.floor(Math.random() * browsers.length)] as string;
+    const osName = osNames[Math.floor(Math.random() * osNames.length)] as string;
 
     // Generate timestamp for time-series data (hourly intervals going back)
     const timestamp = new Date(now - i * 3600000).toISOString();
@@ -144,7 +144,7 @@ function average(values: number[]): number {
 function percentile(sortedValues: number[], p: number): number {
   if (sortedValues.length === 0) return 0;
   const index = Math.ceil((p / 100) * sortedValues.length) - 1;
-  return sortedValues[Math.max(0, index)];
+  return sortedValues[Math.max(0, index)] ?? 0;
 }
 
 /**

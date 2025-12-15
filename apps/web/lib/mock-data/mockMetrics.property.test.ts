@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it } from "vitest";
 import * as fc from "fast-check";
 import { generateMockMetrics } from "./mockMetrics";
 
@@ -107,8 +107,11 @@ describe("Mock Data Generation Properties", () => {
           const metrics = generateMockMetrics("1", count);
           // Check that each timestamp is earlier than or equal to the previous one
           for (let i = 1; i < metrics.length; i++) {
-            const prevTime = new Date(metrics[i - 1].timestamp).getTime();
-            const currTime = new Date(metrics[i].timestamp).getTime();
+            const prevMetric = metrics[i - 1];
+            const currMetric = metrics[i];
+            if (!prevMetric || !currMetric) return false;
+            const prevTime = new Date(prevMetric.timestamp).getTime();
+            const currTime = new Date(currMetric.timestamp).getTime();
             if (currTime > prevTime) {
               return false;
             }

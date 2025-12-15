@@ -12,7 +12,9 @@ async function testMockData() {
   console.log("1. Testing getMockSites()...");
   const sites = await getMockSites();
   console.log(`   ✓ Returned ${sites.length} sites`);
-  console.log(`   ✓ First site: ${sites[0].name} (${sites[0].url})`);
+  if (sites[0]) {
+    console.log(`   ✓ First site: ${sites[0].name} (${sites[0].url})`);
+  }
   console.log(`   ✓ Site IDs: ${sites.map((s) => s.siteId).join(", ")}\n`);
 
   // Test getMockSite
@@ -34,9 +36,11 @@ async function testMockData() {
   console.log("4. Testing generateMockMetrics()...");
   const metrics = generateMockMetrics("1", 10);
   console.log(`   ✓ Generated ${metrics.length} metrics`);
-  console.log(`   ✓ First metric LCP: ${metrics[0].lcp?.toFixed(2)} ms`);
-  console.log(`   ✓ First metric FID: ${metrics[0].fid?.toFixed(2)} ms`);
-  console.log(`   ✓ First metric CLS: ${metrics[0].cls?.toFixed(3)}`);
+  if (metrics[0]) {
+    console.log(`   ✓ First metric LCP: ${metrics[0].lcp?.toFixed(2)} ms`);
+    console.log(`   ✓ First metric FID: ${metrics[0].fid?.toFixed(2)} ms`);
+    console.log(`   ✓ First metric CLS: ${metrics[0].cls?.toFixed(3)}`);
+  }
   console.log(`   ✓ Device types: ${[...new Set(metrics.map((m) => m.deviceType))].join(", ")}`);
   console.log(`   ✓ Browsers: ${[...new Set(metrics.map((m) => m.browserName))].join(", ")}\n`);
 

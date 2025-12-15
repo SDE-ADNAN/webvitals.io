@@ -1,255 +1,263 @@
-# Library Documentation
+# WebVitals Dashboard - Library Documentation
 
-This directory contains the core utilities, mock data, state management, and validation logic for the WebVitals.io frontend dashboard.
+This directory contains the core library code for the WebVitals dashboard application.
 
 ## Directory Structure
 
 ```
 lib/
-├── config/           # Environment configuration
-├── mock-data/        # Mock data generators and types
-├── react-query/      # React Query configuration
-├── redux/            # Redux store and slices
-├── utils/            # Utility functions
-└── validations/      # Form validation schemas
+├── api/                    # API client and HTTP utilities
+│   ├── client.ts          # Axios instance with interceptors
+│   └── client.test.ts     # API client tests
+│
+├── config/                 # Configuration utilities
+│   └── env.ts             # Environment variable validation
+│
+├── mock-data/             # Mock data for development (Week 1)
+│   ├── types.ts           # Mock data type definitions
+│   ├── mockSites.ts       # Mock site data and functions
+│   ├── mockMetrics.ts     # Mock metrics generator
+│   └── *.property.test.ts # Property-based tests
+│
+├── react-query/           # React Query configuration and hooks
+│   ├── queryClient.ts     # QueryClient configuration
+│   └── queries/           # Query hooks
+│       ├── useSites.ts    # Site data hooks
+│       └── useMetrics.ts  # Metrics data hooks
+│
+├── redux/                 # Redux state management
+│   ├── store.ts           # Redux store configuration
+│   ├── hooks.ts           # Typed Redux hooks
+│   └── slices/            # Redux slices
+│       ├── themeSlice.ts  # Theme state
+│       ├── userSlice.ts   # User/auth state
+│       └── uiSlice.ts     # UI state
+│
+├── utils/                 # Utility functions
+│   ├── metrics.ts         # Metric classification utilities
+│   ├── formatters.ts      # Data formatting utilities
+│   └── *.property.test.ts # Property-based tests
+│
+└── validations/           # Form validation schemas
+    └── schemas.ts         # Zod validation schemas
 ```
 
-## Mock Data (`lib/mock-data/`)
+## API Client (`lib/api/client.ts`)
 
-Mock data generators for development and testing before backend integration.
+The API client is configured with Axios and includes:
 
-### Files
-
-- **`types.ts`** - TypeScript type definitions for mock data
-- **`mockSites.ts`** - Sample site data and retrieval functions
-- **`mockMetrics.ts`** - Metric generation and filtering functions
-- **`mockMetrics.property.test.ts`** - Property-based tests for mock data
+- **Base URL**: Configured from `NEXT_PUBLIC_API_URL` environment variable
+- **Timeout**: 10 seconds
+- **Request Interceptor**: Automatically adds authentication token from Redux store
+- **Response Interceptor**: Handles 401 errors, timeouts, and network errors
 
 ### Usage
 
 ```typescript
-import { getMockSites, getMockSite } from "@/lib/mock-data/mockSites";
-import { generateMockMetrics, getMockMetrics } from "@/lib/mock-data/mockMetrics";
+import { apiClient } from "@/lib/api/client";
 
-// Get all sites (with simulated 500ms delay)
-const sites = await getMockSites();
+// GET request
+const response = await apiClient.get("/sites");
 
-// Get a specific site by siteId (with simulated 300ms delay)
-const site = await getMockSite("site_abc123");
-
-// Generate metrics for a site
-const metrics = generateMockMetrics("1", 100);
-
-// Get metrics with filters (with simulated 800ms delay)
-const { metrics, summary } = await getMockMetrics("1", {
-  deviceType: "mobile",
-  timeRange: "24h",
-  browserName: "Chrome",
-});
+// POST request
+const response = await apiClient.post("/sites", { name: "My Site", url: "https://example.com" });
 ```
 
-### Mock Data Characteristics
+### Week 3 Integration
 
-**Sites:**
-- 3 pre-configured sites with realistic data
-- Includes: id, userId, name, url, domain, siteId, isActive, timestamps
+The API client is ready for Week 3 backend integration. Simply update the React Query hooks to use `apiClient` instead of mock data functions.
 
-**Metrics:**
-- Realistic Core Web Vitals ranges:
-  - LCP: 1000-6000ms
-  - FID: 50-450ms
-  - CLS: 0-0.4
-  - TTFB: 100-1100ms
-  - FCP: 500-3500ms
-- Varied device types: mobile, desktop, tablet
-- Multiple browsers: Chrome, Firefox, Safari, Edge
-- Multiple OS: Windows, macOS, Linux, iOS, Android
-- Time-series data with hourly timestamps
+## React Query Hooks
 
-## Utilities (`lib/utils/`)
+### useSites()
 
-### Metrics Utilities (`metrics.ts`)
-
-Functions for classifying and displaying Core Web Vitals metrics.
+Fetches all sites for the current user.
 
 ```typescript
-import {
-  getMetricStatus,
-  getMetricColor,
-  getMetricStatusLabel,
-  METRIC_THRESHOLDS,
-} from "@/lib/utils/metrics";
+import { useSites } from "@/lib/react-query/queries/useSites";
 
-// Classify a metric value
-const status = getMetricStatus("lcp", 2500); // "good" | "needs-improvement" | "poor"
-
-// Get Tailwind CSS classes for status
-const colorClasses = getMetricColor("good"); // "text-green-600 bg-green-100 ..."
-
-// Get human-readable label
-const label = getMetricStatusLabel("good"); // "Good"
-
-// Access thresholds
-console.log(METRIC_THRESHOLDS.lcp); // { good: 2500, poor: 4000 }
+function MyComponent() {
+  const { data: sites, isLoading, error } = useSites();
+  
+  if (isLoading) return <CardSkeleton />;
+  if (error) return <ErrorMessage error={error} />;
+  
+  return <SiteList sites={sites} />;
+}
 ```
 
-**Thresholds (based on Google's Core Web Vitals standards):**
-- LCP: ≤2500ms (good), ≤4000ms (needs improvement), >4000ms (poor)
-- FID: ≤100ms (good), ≤300ms (needs improvement), >300ms (poor)
-- CLS: ≤0.1 (good), ≤0.25 (needs improvement), >0.25 (poor)
-- TTFB: ≤800ms (good), ≤1800ms (needs improvement), >1800ms (poor)
-- FCP: ≤1800ms (good), ≤3000ms (needs improvement), >3000ms (poor)
+### useSite(siteId)
 
-### Formatters (`formatters.ts`)
-
-Functions for formatting values for display.
+Fetches a single site by ID.
 
 ```typescript
-import {
-  formatMetricValue,
-  formatTimestamp,
-  formatRelativeTime,
-  formatDuration,
-  formatNumber,
-  formatPercentage,
-} from "@/lib/utils/formatters";
+import { useSite } from "@/lib/react-query/queries/useSites";
 
-// Format metric values
-formatMetricValue(2543.789, "ms"); // "2543.79ms"
-formatMetricValue(0.123, ""); // "0.123"
-
-// Format timestamps
-formatTimestamp(new Date()); // "Dec 15, 2025 11:24 AM"
-formatTimestamp(date, "yyyy-MM-dd"); // "2025-12-15"
-formatRelativeTime(date); // "2 hours ago"
-
-// Format durations
-formatDuration(65000); // "1m 5s"
-formatDuration(3665000); // "1h 1m"
-formatDuration(90000000); // "1d 1h"
-
-// Format numbers and percentages
-formatNumber(1234567); // "1,234,567"
-formatPercentage(0.75); // "75.0%"
-formatPercentage(0.123, 2); // "12.30%"
+function SiteDetails({ siteId }: { siteId: string }) {
+  const { data: site, isLoading } = useSite(siteId);
+  
+  if (isLoading) return <CardSkeleton />;
+  if (!site) return <NotFound />;
+  
+  return <SiteInfo site={site} />;
+}
 ```
 
-## Validations (`lib/validations/`)
+### useMetrics(siteId, filters)
 
-Zod schemas for form validation.
-
-### Schemas
+Fetches metrics for a site with optional filters.
 
 ```typescript
-import {
-  siteSchema,
-  loginSchema,
-  signupSchema,
-  alertSchema,
-  profileSchema,
-  type SiteFormData,
-  type LoginFormData,
-  type SignupFormData,
-} from "@/lib/validations/schemas";
+import { useMetrics } from "@/lib/react-query/queries/useMetrics";
 
-// Site form validation
-const result = siteSchema.safeParse({
-  name: "My Site",
-  url: "https://example.com",
-});
+function MetricsChart({ siteId }: { siteId: string }) {
+  const { data, isLoading } = useMetrics(siteId, {
+    timeRange: "24h",
+    deviceType: "mobile",
+  });
+  
+  if (isLoading) return <ChartSkeleton />;
+  
+  return <Chart metrics={data.metrics} summary={data.summary} />;
+}
+```
 
-if (result.success) {
-  const data: SiteFormData = result.data;
+## Error Handling
+
+### ErrorBoundary Component
+
+Catches React component errors and displays a fallback UI.
+
+```typescript
+import { ErrorBoundary } from "@/app/components/UI/ErrorBoundary";
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <YourComponent />
+    </ErrorBoundary>
+  );
 }
 
-// Use with react-hook-form
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-const form = useForm<SiteFormData>({
-  resolver: zodResolver(siteSchema),
-});
+// With custom fallback
+<ErrorBoundary fallback={<CustomErrorUI />}>
+  <YourComponent />
+</ErrorBoundary>
 ```
 
-**Available Schemas:**
+## Loading States
 
-1. **`siteSchema`** - Site creation/editing
-   - name: 3-50 characters
-   - url: Valid URL starting with http:// or https://
+### Skeleton Components
 
-2. **`loginSchema`** - User login
-   - email: Valid email address
-   - password: Minimum 8 characters
+Six skeleton components for different loading scenarios:
 
-3. **`signupSchema`** - User registration
-   - email: Valid email address
-   - password: Min 8 chars, must contain uppercase, lowercase, and number
-   - confirmPassword: Must match password
+```typescript
+import {
+  CardSkeleton,
+  ChartSkeleton,
+  TableSkeleton,
+  GridSkeleton,
+  TextSkeleton,
+  MetricCardSkeleton,
+} from "@/app/components/UI/Skeleton";
 
-4. **`alertSchema`** - Alert configuration
-   - siteId: Positive number
-   - metricType: One of "lcp", "fid", "cls", "ttfb", "fcp"
-   - threshold: Positive number
-   - enabled: Boolean
+// Single card
+<CardSkeleton />
 
-5. **`profileSchema`** - User profile updates
-   - firstName: Optional, 1-50 characters
-   - lastName: Optional, 1-50 characters
-   - email: Valid email address
+// Chart loading
+<ChartSkeleton />
+
+// Table with 10 rows
+<TableSkeleton rows={10} />
+
+// Grid of 6 cards in 3 columns
+<GridSkeleton items={6} columns={3} />
+
+// Text with 5 lines
+<TextSkeleton lines={5} width="3/4" />
+
+// Metric card
+<MetricCardSkeleton />
+```
+
+## Redux State Management
+
+### Store Structure
+
+```typescript
+{
+  theme: {
+    mode: "light" | "dark"
+  },
+  user: {
+    user: User | null,
+    token: string | null,
+    isAuthenticated: boolean,
+    isLoading: boolean
+  },
+  ui: {
+    sidebarOpen: boolean,
+    mobileMenuOpen: boolean,
+    activeModal: string | null
+  }
+}
+```
+
+### Usage
+
+```typescript
+import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
+import { toggleTheme } from "@/lib/redux/slices/themeSlice";
+
+function ThemeToggle() {
+  const mode = useAppSelector((state) => state.theme.mode);
+  const dispatch = useAppDispatch();
+  
+  return (
+    <button onClick={() => dispatch(toggleTheme())}>
+      {mode === "light" ? "🌙" : "☀️"}
+    </button>
+  );
+}
+```
 
 ## Testing
 
-### Property-Based Tests
+### Running Tests
 
-Property-based tests ensure correctness across a wide range of inputs using fast-check.
-
-**Run all tests:**
 ```bash
+# Run all tests
 npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with UI
+npm run test:ui
 ```
 
-**Run specific test files:**
-```bash
-npm test -- lib/mock-data/mockMetrics.property.test.ts
-npm test -- lib/utils/metrics.property.test.ts
-```
+### Test Coverage
 
-**Test Coverage:**
+- **Unit Tests**: API client configuration
+- **Property-Based Tests**: 
+  - Theme slice (2 properties)
+  - Metric classification (18 properties)
+  - Mock data generation (12 properties)
 
-1. **Mock Data Generation** (12 tests)
-   - Property 41: Mock Metric Value Ranges
-   - Property 42: Time-Series Data Timestamps
-   - Property 43: Mock Data Variety
+Total: 37 tests passing
 
-2. **Metric Classification** (18 tests)
-   - Property 25: Good Metric Status Indicator
-   - Property 26: Needs Improvement Metric Status Indicator
-   - Property 27: Poor Metric Status Indicator
+## Week 3 Migration Guide
 
-### Manual Testing
+To integrate with the real API in Week 3:
 
-Test scripts are available in `apps/web/scripts/`:
+1. **Update React Query Hooks**: Replace mock data calls with API client calls
+2. **Environment Variables**: Set `NEXT_PUBLIC_USE_MOCK_DATA=false`
+3. **API Endpoints**: Ensure backend endpoints match the expected routes
 
-```bash
-# Test mock data functions
-npx tsx scripts/test-mock-data.ts
+Example migration:
 
-# Test utility functions
-npx tsx scripts/test-utilities.ts
-```
-
-## Integration with Backend (Week 3)
-
-The mock data structure exactly matches the expected API response format. To integrate with the real backend:
-
-1. Update React Query hooks in `lib/react-query/queries/`
-2. Replace `getMockSites()` with `apiClient.get('/sites')`
-3. Replace `getMockMetrics()` with `apiClient.get('/metrics')`
-4. Set `NEXT_PUBLIC_USE_MOCK_DATA=false` in environment variables
-
-Example:
 ```typescript
-// Before (Week 1 - Mock Data)
+// Week 1 (Mock Data)
 export function useSites() {
   return useQuery({
     queryKey: ["sites"],
@@ -257,7 +265,7 @@ export function useSites() {
   });
 }
 
-// After (Week 3 - Real API)
+// Week 3 (Real API)
 export function useSites() {
   return useQuery({
     queryKey: ["sites"],
@@ -271,20 +279,16 @@ export function useSites() {
 
 ## Best Practices
 
-1. **Type Safety**: All functions are fully typed with TypeScript
-2. **Validation**: Use Zod schemas for all form inputs
-3. **Testing**: Property-based tests ensure correctness across many inputs
-4. **Consistency**: Mock data matches production API structure exactly
-5. **Performance**: Mock data includes realistic delays to simulate network latency
+1. **Always use typed hooks**: Use `useAppSelector` and `useAppDispatch` instead of raw Redux hooks
+2. **Handle loading states**: Always show skeleton components while data is loading
+3. **Handle errors**: Wrap components in ErrorBoundary and handle query errors
+4. **Use React Query**: For server state (sites, metrics), use React Query hooks
+5. **Use Redux**: For client state (theme, user, UI), use Redux slices
+6. **Type safety**: All components and functions are fully typed with TypeScript
 
-## Requirements Validated
+## Additional Resources
 
-This implementation validates the following requirements:
-
-- **16.1-16.4**: Mock data generation with realistic values
-- **12.1-12.5**: Metric classification and display
-- **23.1-23.5**: Form validation schemas
-- **27.1-27.4**: Type definitions matching Prisma schema
-- **28.1-28.9**: Metric threshold definitions
-
-All requirements are validated through property-based tests running 100 iterations each.
+- [React Query Documentation](https://tanstack.com/query/latest)
+- [Redux Toolkit Documentation](https://redux-toolkit.js.org/)
+- [Axios Documentation](https://axios-http.com/)
+- [Zod Documentation](https://zod.dev/)

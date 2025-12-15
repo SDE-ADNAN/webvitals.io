@@ -1,6 +1,6 @@
 import * as fc from "fast-check";
-import { describe, it, expect } from "vitest";
-import themeReducer, { toggleTheme, setTheme } from "./themeSlice";
+import { describe, it } from "vitest";
+import themeReducer, { toggleTheme } from "./themeSlice";
 
 describe("Theme Slice Properties", () => {
   /**
