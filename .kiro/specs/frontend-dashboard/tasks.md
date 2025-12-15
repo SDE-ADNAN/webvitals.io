@@ -71,7 +71,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Follow README instructions in a fresh clone
   - _Requirements: 19.1, 19.2, 19.3, 19.4, 19.5_
 
-- [ ] 1.7 Set up Turborepo monorepo structure
+- [x] 1.7 Set up Turborepo monorepo structure
   - Install Turborepo: `npm install turbo --global` and `npx create-turbo@latest`
   - Create monorepo structure with the following workspaces:
     - `apps/web` - Next.js frontend dashboard (move current app here)

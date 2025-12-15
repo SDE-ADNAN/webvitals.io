@@ -133,9 +133,9 @@ WebVitals.io is a full-stack SaaS application built to provide real-time monitor
 - **Performance-optimized** with code splitting and lazy loading
 - **Mock data structured** to match future API responses exactly
 
-### Monorepo Architecture (Planned - Task 1.7)
+### Monorepo Architecture (✅ Implemented - Task 1.7)
 
-The project will migrate to a **Turborepo monorepo** structure to support:
+The project uses a **Turborepo monorepo** structure to support:
 
 - **Multi-platform deployment**: Web (Next.js), Mobile (React Native), API (Express.js)
 - **Code sharing**: Shared types, utilities, and UI components across all platforms
@@ -151,6 +151,8 @@ The project will migrate to a **Turborepo monorepo** structure to support:
 - `packages/ui` - Shared UI components
 - `packages/utils` - Shared utility functions
 - `packages/config` - Shared configuration files
+
+📖 **See [MONOREPO.md](./MONOREPO.md) for detailed monorepo documentation.**
 
 ## 📁 Project Structure
 
@@ -193,7 +195,7 @@ webvitals-dashboard/
 └── ...config files
 ```
 
-### Future Monorepo Structure (Task 1.7+)
+### Current Monorepo Structure
 ```
 webvitals-monorepo/
 ├── apps/
@@ -750,6 +752,7 @@ Node.js version requirements.
 
 ### Documentation
 
+- **[Monorepo Structure Guide](./MONOREPO.md)**: Complete guide to the Turborepo monorepo setup
 - **[Product Requirements Document (PRD)](./docs/PRD.md)**: Complete product specification
 - **[Frontend Dashboard Spec](./.kiro/specs/frontend-dashboard/)**: Detailed requirements, design, and tasks
 - **[Next.js Documentation](https://nextjs.org/docs)**: Next.js 15 App Router guide
