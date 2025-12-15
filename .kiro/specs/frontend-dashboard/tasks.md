@@ -287,7 +287,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.5: Base UI Components
 
-- [ ] 5. Create reusable Button component
+- [x] 5. Create reusable Button component
   - Create `app/components/UI/Button.tsx`
   - Support variants: primary, secondary, outline, ghost
   - Support sizes: sm, md, lg
@@ -296,7 +296,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Button renders with all variants
   - _Requirements: 26.1_
 
-- [ ] 5.1 Create reusable Input component
+- [x] 5.1 Create reusable Input component
   - Create `app/components/UI/Input.tsx`
   - Support types: text, email, password, url
   - Include error state styling
@@ -305,7 +305,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Input renders with error states
   - _Requirements: 23.2, 26.3_
 
-- [ ] 5.2 Create Card component
+- [x] 5.2 Create Card component
   - Create `app/components/UI/Card.tsx`
   - Support hover effects
   - Include optional onClick for clickable cards
@@ -313,14 +313,14 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Card renders correctly
   - _Requirements: 7.2_
 
-- [ ] 5.3 Create Badge component
+- [x] 5.3 Create Badge component
   - Create `app/components/UI/Badge.tsx`
   - Support color variants: green, yellow, red, blue, gray
   - Include icon support
   - Test: Badge renders with all colors
   - _Requirements: 12.2, 12.3, 12.4_
 
-- [ ] 5.4 Create Modal component
+- [x] 5.4 Create Modal component
   - Create `app/components/UI/Modal.tsx`
   - Implement backdrop with click-outside to close
   - Add escape key handler
