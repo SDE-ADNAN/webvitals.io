@@ -98,7 +98,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.2: Core Infrastructure & State Management
 
-- [ ] 2. Set up TypeScript types and interfaces
+- [x] 2. Set up TypeScript types and interfaces
   - Create `packages/types/src/site.ts` with Site interface matching Prisma schema
   - Create `packages/types/src/metric.ts` with Metric and MetricSummary interfaces
   - Create `packages/types/src/user.ts` with User and AuthState interfaces
@@ -107,7 +107,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Import types in web app without errors
   - _Requirements: 27.1_
 
-- [ ] 2.1 Configure Redux Toolkit store
+- [x] 2.1 Configure Redux Toolkit store
   - Create `lib/redux/store.ts` with configureStore
   - Install and configure redux-persist for theme and user slices
   - Create `lib/redux/hooks.ts` with typed useAppDispatch and useAppSelector
@@ -115,7 +115,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Store initializes without errors
   - _Requirements: 21.1, 21.2, 21.4_
 
-- [ ] 2.2 Implement theme slice
+- [x] 2.2 Implement theme slice
   - Create `lib/redux/slices/themeSlice.ts`
   - Add state: `{ mode: 'light' | 'dark' }`
   - Add actions: toggleTheme(), setTheme(mode)
@@ -124,7 +124,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Theme state updates correctly
   - _Requirements: 5.1, 5.3_
 
-- [ ] 2.3 Write property test for theme slice
+- [x] 2.3 Write property test for theme slice
   - **Property 5: Theme Toggle Functionality**
   - **Validates: Requirements 5.1**
   - Install fast-check: `npm install --save-dev fast-check`
@@ -134,7 +134,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Configure to run 100 iterations
   - _Requirements: 5.1_
 
-- [ ] 2.4 Implement user slice
+- [x] 2.4 Implement user slice
   - Create `lib/redux/slices/userSlice.ts`
   - Add state: `{ user, token, isAuthenticated, isLoading }`
   - Add actions: setUser(), setToken(), logout(), setLoading()
@@ -143,7 +143,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: User state updates correctly
   - _Requirements: 24.1, 24.4_
 
-- [ ] 2.5 Implement UI slice
+- [x] 2.5 Implement UI slice
   - Create `lib/redux/slices/uiSlice.ts`
   - Add state: `{ sidebarOpen, mobileMenuOpen, activeModal }`
   - Add actions: toggleSidebar(), toggleMobileMenu(), openModal(), closeModal()
@@ -151,7 +151,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: UI state updates correctly
   - _Requirements: 8.2, 8.5_
 
-- [ ] 2.6 Configure React Query
+- [x] 2.6 Configure React Query
   - Create `lib/react-query/queryClient.ts` with QueryClient configuration
   - Set staleTime: 1 minute, cacheTime: 5 minutes
   - Configure retry logic with exponential backoff
@@ -159,7 +159,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Query client initializes correctly
   - _Requirements: 21.3, 21.5_
 
-- [ ] 2.7 Create root providers component
+- [x] 2.7 Create root providers component
   - Create `app/providers.tsx` combining Redux and React Query providers
   - Wrap with PersistGate for redux-persist
   - Add React Query Devtools in development
