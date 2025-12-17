@@ -490,7 +490,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.9: Site Details Page - Charts
 
-- [ ] 9. Create ChartContainer component
+- [x] 9. Create ChartContainer component
   - Create `app/components/Charts/ChartContainer.tsx`
   - Wrapper component for consistent chart styling
   - Include title and optional description
@@ -498,7 +498,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Container renders correctly
   - _Requirements: 11.5_
 
-- [ ] 9.1 Create LCPChart component
+- [x] 9.1 Create LCPChart component
   - Create `app/components/Charts/LCPChart.tsx`
   - Use Recharts LineChart
   - X-axis: timestamp, Y-axis: LCP value (ms)
@@ -509,7 +509,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Chart renders with mock data
   - _Requirements: 11.1, 11.5_
 
-- [ ] 9.2 Create FIDChart component
+- [x] 9.2 Create FIDChart component
   - Create `app/components/Charts/FIDChart.tsx`
   - Use Recharts BarChart
   - X-axis: time buckets, Y-axis: FID value (ms)
@@ -518,7 +518,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Chart renders with mock data
   - _Requirements: 11.2, 11.5_
 
-- [ ] 9.3 Create CLSChart component
+- [x] 9.3 Create CLSChart component
   - Create `app/components/Charts/CLSChart.tsx`
   - Use Recharts AreaChart
   - X-axis: timestamp, Y-axis: CLS score
@@ -527,7 +527,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Chart renders with mock data
   - _Requirements: 11.3, 11.5_
 
-- [ ] 9.4 Add accessibility to charts
+- [x] 9.4 Add accessibility to charts
   - Add role="img" and aria-label to each chart
   - Include sr-only text with summary statistics
   - Ensure charts have descriptive titles
