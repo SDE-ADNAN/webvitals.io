@@ -538,7 +538,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.10: Site Details Page - Filters
 
-- [ ] 10. Create TimeRangeSelector component
+- [x] 10. Create TimeRangeSelector component
   - Create `app/components/SiteDetails/TimeRangeSelector.tsx`
   - Display buttons for 24h, 7d, 30d options
   - Highlight selected option
@@ -546,7 +546,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Selector updates selected state
   - _Requirements: 13.1, 13.3_
 
-- [ ] 10.1 Create FilterBar component
+- [x] 10.1 Create FilterBar component
   - Create `app/components/SiteDetails/FilterBar.tsx`
   - Include dropdowns for device type (mobile, desktop, tablet, all)
   - Include dropdown for browser (Chrome, Firefox, Safari, Edge, all)
@@ -555,7 +555,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Filters update state correctly
   - _Requirements: 14.1, 14.4, 14.5_
 
-- [ ] 10.2 Implement site details page
+- [x] 10.2 Implement site details page
   - Create `app/dashboard/[siteId]/page.tsx`
   - Use useSite(siteId) and useMetrics(siteId, filters) hooks
   - Manage filter state (timeRange, deviceType, browser)
@@ -566,7 +566,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Page renders and filters work
   - _Requirements: 10.1, 10.2, 10.3, 13.2, 13.4, 14.2, 14.3_
 
-- [ ] 10.3 Add default time range on page load
+- [x] 10.3 Add default time range on page load
   - Set initial timeRange state to '24h'
   - Test: Page loads with 24h selected by default
   - _Requirements: 13.5_
