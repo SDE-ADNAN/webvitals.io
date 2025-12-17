@@ -454,7 +454,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.8: Site Details Page - Metric Cards
 
-- [ ] 8. Create MetricCard component
+- [x] 8. Create MetricCard component
   - Create `app/components/SiteDetails/MetricCard.tsx`
   - Display metric name (LCP, FID, CLS)
   - Show current value with unit
@@ -464,21 +464,21 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Card renders with all metric types
   - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5_
 
-- [ ] 8.1 Write unit tests for MetricCard
+- [x] 8.1 Write unit tests for MetricCard
   - Create `app/components/SiteDetails/MetricCard.test.tsx`
   - Test metric name and value display
   - Test status badge color for good/needs-improvement/poor
   - Test trend indicator displays correctly
   - _Requirements: 12.1, 12.2, 12.3, 12.4_
 
-- [ ] 8.2 Create MetricsGrid component
+- [x] 8.2 Create MetricsGrid component
   - Create `app/components/SiteDetails/MetricsGrid.tsx`
   - Display 3 MetricCards in responsive grid
   - Pass LCP, FID, CLS data to respective cards
   - Test: Grid renders all three metric cards
   - _Requirements: 10.2_
 
-- [ ] 8.3 Create SiteHeader component
+- [x] 8.3 Create SiteHeader component
   - Create `app/components/SiteDetails/SiteHeader.tsx`
   - Display site name as h1
   - Show site URL as link

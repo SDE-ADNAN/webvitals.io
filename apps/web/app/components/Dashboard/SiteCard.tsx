@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Card } from '../UI/Card';
 import { Badge } from '../UI/Badge';
-import { getMetricStatus, getMetricColor, getMetricStatusLabel } from '@/lib/utils/metrics';
+import { getMetricStatus, getMetricStatusLabel } from '@/lib/utils/metrics';
 import type { Site } from '@webvitals/types';
 
 export interface SiteCardProps {
@@ -121,7 +121,6 @@ interface MetricBadgeProps {
 
 function MetricBadge({ label, value, unit, metricType }: MetricBadgeProps) {
   const status = getMetricStatus(metricType, value);
-  const colorClass = getMetricColor(status);
   const statusLabel = getMetricStatusLabel(status);
 
   // Format value based on metric type

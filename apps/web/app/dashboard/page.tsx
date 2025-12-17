@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const handleAddSite = async (data: SiteFormData) => {
     // Mock implementation for Week 1
     // Week 3: Will call API to create site
-    console.log('Adding site:', data);
+    // TODO: Replace with actual API call
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
