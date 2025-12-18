@@ -575,7 +575,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.11: Authentication Pages
 
-- [ ] 11. Create LoginForm component
+- [x] 11. Create LoginForm component
   - Create `app/components/Auth/LoginForm.tsx`
   - Use react-hook-form with loginSchema validation
   - Include email and password fields
@@ -585,7 +585,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Form validates and submits
   - _Requirements: 23.2, 23.3, 24.1_
 
-- [ ] 11.1 Create SignupForm component
+- [x] 11.1 Create SignupForm component
   - Create `app/components/Auth/SignupForm.tsx`
   - Use react-hook-form with signupSchema validation
   - Include email, password, confirmPassword fields
@@ -594,7 +594,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Form validates password complexity and matching
   - _Requirements: 23.2, 23.3_
 
-- [ ] 11.2 Create login page
+- [x] 11.2 Create login page
   - Create `app/auth/login/page.tsx`
   - Render LoginForm component
   - Redirect to dashboard if already authenticated
@@ -602,7 +602,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Page renders and redirects correctly
   - _Requirements: 24.2, 24.5_
 
-- [ ] 11.3 Create signup page
+- [x] 11.3 Create signup page
   - Create `app/auth/signup/page.tsx`
   - Render SignupForm component
   - Redirect to dashboard if already authenticated
@@ -610,7 +610,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Page renders correctly
   - _Requirements: 24.5_
 
-- [ ] 11.4 Implement route protection middleware
+- [x] 11.4 Implement route protection middleware
   - Create `middleware.ts` in root directory
   - Check for authentication token
   - Redirect to /auth/login if not authenticated and accessing protected routes
