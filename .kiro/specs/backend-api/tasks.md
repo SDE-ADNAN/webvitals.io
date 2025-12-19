@@ -23,7 +23,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 1: Project Setup & Configuration
 
-- [ ] 1. Complete project dependencies installation
+- [x] 1. Complete project dependencies installation
   - Install dotenv for environment variables
   - Install cors for cross-origin requests
   - Install morgan for HTTP logging
@@ -31,14 +31,14 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Update port to 4000 (currently 3001)
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 21.1-21.5_
 
-- [ ] 1.1 Create environment configuration
+- [x] 1.1 Create environment configuration
   - Create .env.example with all required variables (NODE_ENV, PORT, DATABASE_URL, JWT_SECRET, JWT_EXPIRES_IN, FRONTEND_URL)
   - Create .env file for development
   - Install and configure dotenv
   - Add environment validation on startup
   - _Requirements: 27.1, 27.4, 27.5_
 
-- [ ] 1.2 Set up middleware pipeline
+- [x] 1.2 Set up middleware pipeline
   - Configure CORS for frontend origin (http://localhost:3000)
   - Add body parser middleware (express.json())
   - Add morgan HTTP request logging
