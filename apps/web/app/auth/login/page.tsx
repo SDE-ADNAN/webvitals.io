@@ -31,7 +31,7 @@ export default function LoginPage() {
             Sign in to WebVitals.io
           </h1>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Monitor your website's performance metrics
+            Monitor your website&apos;s performance metrics
           </p>
         </div>
 
@@ -40,7 +40,7 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link
                 href="/auth/signup"
                 className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"

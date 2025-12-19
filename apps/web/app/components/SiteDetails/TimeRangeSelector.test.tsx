@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { TimeRangeSelector, TimeRange } from './TimeRangeSelector';
+import { TimeRangeSelector } from './TimeRangeSelector';
 import { describe, it, expect, vi } from 'vitest';
 
 describe('TimeRangeSelector', () => {

@@ -52,7 +52,7 @@ export function LoginForm() {
 
       // Redirect to dashboard
       router.push('/dashboard');
-    } catch (error) {
+    } catch {
       setSubmitError('Login failed. Please try again.');
     } finally {
       setIsSubmitting(false);

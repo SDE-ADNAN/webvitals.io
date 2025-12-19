@@ -31,7 +31,7 @@ export default function SignupPage() {
             Create your account
           </h1>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Start monitoring your website's performance today
+            Start monitoring your website&apos;s performance today
           </p>
         </div>
 

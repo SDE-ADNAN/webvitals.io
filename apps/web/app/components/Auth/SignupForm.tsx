@@ -52,7 +52,7 @@ export function SignupForm() {
 
       // Redirect to dashboard
       router.push('/dashboard');
-    } catch (error) {
+    } catch {
       setSubmitError('Signup failed. Please try again.');
     } finally {
       setIsSubmitting(false);
