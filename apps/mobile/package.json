@@ -1,0 +1,11 @@
+{
+  "name": "@webvitals/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "dev": "echo 'Mobile app placeholder - React Native setup pending'",
+    "build": "echo 'Mobile app placeholder - React Native setup pending'",
+    "lint": "echo 'Mobile app placeholder - React Native setup pending'"
+  }
+}
