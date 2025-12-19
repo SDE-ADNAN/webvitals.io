@@ -3,9 +3,11 @@
  * 
  * Area chart displaying Cumulative Layout Shift (CLS) scores over time.
  * Shows threshold lines at 0.1 (good) and 0.25 (poor).
+ * 
+ * Optimized with memoization to prevent unnecessary re-renders.
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   AreaChart,
   Area,
@@ -28,24 +30,31 @@ interface CLSChartProps {
   timeRange?: '24h' | '7d' | '30d';
 }
 
-export function CLSChart({ data, timeRange = '24h' }: CLSChartProps) {
-  // Format data for Recharts
-  const chartData = data.map((item) => ({
-    timestamp: new Date(item.timestamp).getTime(),
-    cls: Math.round(item.cls * 1000) / 1000, // Round to 3 decimal places
-    formattedTime: formatTimestamp(item.timestamp, timeRange),
-  }));
+export const CLSChart = React.memo(function CLSChart({ data, timeRange = '24h' }: CLSChartProps) {
+  // Format data for Recharts with memoization
+  const chartData = useMemo(() => {
+    const formatted = data.map((item) => ({
+      timestamp: new Date(item.timestamp).getTime(),
+      cls: Math.round(item.cls * 1000) / 1000, // Round to 3 decimal places
+      formattedTime: formatTimestamp(item.timestamp, timeRange),
+    }));
+    
+    // Sort by timestamp ascending
+    formatted.sort((a, b) => a.timestamp - b.timestamp);
+    return formatted;
+  }, [data, timeRange]);
 
-  // Sort by timestamp ascending
-  chartData.sort((a, b) => a.timestamp - b.timestamp);
-
-  // Calculate summary statistics for accessibility
-  const clsValues = chartData.map(d => d.cls);
-  const avgCls = clsValues.length > 0 
-    ? Math.round((clsValues.reduce((sum, val) => sum + val, 0) / clsValues.length) * 1000) / 1000
-    : 0;
-  const minCls = clsValues.length > 0 ? Math.min(...clsValues) : 0;
-  const maxCls = clsValues.length > 0 ? Math.max(...clsValues) : 0;
+  // Calculate summary statistics for accessibility with memoization
+  const { avgCls, minCls, maxCls } = useMemo(() => {
+    const clsValues = chartData.map(d => d.cls);
+    return {
+      avgCls: clsValues.length > 0 
+        ? Math.round((clsValues.reduce((sum, val) => sum + val, 0) / clsValues.length) * 1000) / 1000
+        : 0,
+      minCls: clsValues.length > 0 ? Math.min(...clsValues) : 0,
+      maxCls: clsValues.length > 0 ? Math.max(...clsValues) : 0,
+    };
+  }, [chartData]);
 
   return (
     <div role="img" aria-label={`Area chart showing CLS scores over the last ${timeRange}. Average: ${avgCls.toFixed(3)}, ranging from ${minCls.toFixed(3)} to ${maxCls.toFixed(3)}.`}>
@@ -56,7 +65,7 @@ export function CLSChart({ data, timeRange = '24h' }: CLSChartProps) {
         Maximum: {maxCls.toFixed(3)}. 
         Good threshold is 0.1, poor threshold is 0.25.
       </div>
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={400} debounce={300}>
       <AreaChart
         data={chartData}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -144,7 +153,7 @@ export function CLSChart({ data, timeRange = '24h' }: CLSChartProps) {
     </ResponsiveContainer>
     </div>
   );
-}
+});
 
 /**
  * Format timestamp based on time range

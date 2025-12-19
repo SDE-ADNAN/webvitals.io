@@ -3,9 +3,11 @@
  * 
  * Line chart displaying Largest Contentful Paint (LCP) values over time.
  * Shows threshold lines at 2500ms (good) and 4000ms (poor).
+ * 
+ * Optimized with memoization to prevent unnecessary re-renders.
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -28,24 +30,31 @@ interface LCPChartProps {
   timeRange?: '24h' | '7d' | '30d';
 }
 
-export function LCPChart({ data, timeRange = '24h' }: LCPChartProps) {
-  // Format data for Recharts
-  const chartData = data.map((item) => ({
-    timestamp: new Date(item.timestamp).getTime(),
-    lcp: Math.round(item.lcp),
-    formattedTime: formatTimestamp(item.timestamp, timeRange),
-  }));
+export const LCPChart = React.memo(function LCPChart({ data, timeRange = '24h' }: LCPChartProps) {
+  // Format data for Recharts with memoization
+  const chartData = useMemo(() => {
+    const formatted = data.map((item) => ({
+      timestamp: new Date(item.timestamp).getTime(),
+      lcp: Math.round(item.lcp),
+      formattedTime: formatTimestamp(item.timestamp, timeRange),
+    }));
+    
+    // Sort by timestamp ascending
+    formatted.sort((a, b) => a.timestamp - b.timestamp);
+    return formatted;
+  }, [data, timeRange]);
 
-  // Sort by timestamp ascending
-  chartData.sort((a, b) => a.timestamp - b.timestamp);
-
-  // Calculate summary statistics for accessibility
-  const lcpValues = chartData.map(d => d.lcp);
-  const avgLcp = lcpValues.length > 0 
-    ? Math.round(lcpValues.reduce((sum, val) => sum + val, 0) / lcpValues.length)
-    : 0;
-  const minLcp = lcpValues.length > 0 ? Math.min(...lcpValues) : 0;
-  const maxLcp = lcpValues.length > 0 ? Math.max(...lcpValues) : 0;
+  // Calculate summary statistics for accessibility with memoization
+  const { avgLcp, minLcp, maxLcp } = useMemo(() => {
+    const lcpValues = chartData.map(d => d.lcp);
+    return {
+      avgLcp: lcpValues.length > 0 
+        ? Math.round(lcpValues.reduce((sum, val) => sum + val, 0) / lcpValues.length)
+        : 0,
+      minLcp: lcpValues.length > 0 ? Math.min(...lcpValues) : 0,
+      maxLcp: lcpValues.length > 0 ? Math.max(...lcpValues) : 0,
+    };
+  }, [chartData]);
 
   return (
     <div role="img" aria-label={`Line chart showing LCP values over the last ${timeRange}. Average: ${avgLcp}ms, ranging from ${minLcp}ms to ${maxLcp}ms.`}>
@@ -56,7 +65,7 @@ export function LCPChart({ data, timeRange = '24h' }: LCPChartProps) {
         Maximum: {maxLcp} milliseconds. 
         Good threshold is 2500ms, poor threshold is 4000ms.
       </div>
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={400} debounce={300}>
       <LineChart
         data={chartData}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -137,7 +146,7 @@ export function LCPChart({ data, timeRange = '24h' }: LCPChartProps) {
     </ResponsiveContainer>
     </div>
   );
-}
+});
 
 /**
  * Format timestamp based on time range

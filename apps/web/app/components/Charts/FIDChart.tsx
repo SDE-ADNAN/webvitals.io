@@ -3,9 +3,11 @@
  * 
  * Bar chart displaying First Input Delay (FID) values over time.
  * Shows threshold lines at 100ms (good) and 300ms (poor).
+ * 
+ * Optimized with memoization to prevent unnecessary re-renders.
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   BarChart,
   Bar,
@@ -28,24 +30,31 @@ interface FIDChartProps {
   timeRange?: '24h' | '7d' | '30d';
 }
 
-export function FIDChart({ data, timeRange = '24h' }: FIDChartProps) {
-  // Format data for Recharts
-  const chartData = data.map((item) => ({
-    timestamp: new Date(item.timestamp).getTime(),
-    fid: Math.round(item.fid),
-    formattedTime: formatTimestamp(item.timestamp, timeRange),
-  }));
+export const FIDChart = React.memo(function FIDChart({ data, timeRange = '24h' }: FIDChartProps) {
+  // Format data for Recharts with memoization
+  const chartData = useMemo(() => {
+    const formatted = data.map((item) => ({
+      timestamp: new Date(item.timestamp).getTime(),
+      fid: Math.round(item.fid),
+      formattedTime: formatTimestamp(item.timestamp, timeRange),
+    }));
+    
+    // Sort by timestamp ascending
+    formatted.sort((a, b) => a.timestamp - b.timestamp);
+    return formatted;
+  }, [data, timeRange]);
 
-  // Sort by timestamp ascending
-  chartData.sort((a, b) => a.timestamp - b.timestamp);
-
-  // Calculate summary statistics for accessibility
-  const fidValues = chartData.map(d => d.fid);
-  const avgFid = fidValues.length > 0 
-    ? Math.round(fidValues.reduce((sum, val) => sum + val, 0) / fidValues.length)
-    : 0;
-  const minFid = fidValues.length > 0 ? Math.min(...fidValues) : 0;
-  const maxFid = fidValues.length > 0 ? Math.max(...fidValues) : 0;
+  // Calculate summary statistics for accessibility with memoization
+  const { avgFid, minFid, maxFid } = useMemo(() => {
+    const fidValues = chartData.map(d => d.fid);
+    return {
+      avgFid: fidValues.length > 0 
+        ? Math.round(fidValues.reduce((sum, val) => sum + val, 0) / fidValues.length)
+        : 0,
+      minFid: fidValues.length > 0 ? Math.min(...fidValues) : 0,
+      maxFid: fidValues.length > 0 ? Math.max(...fidValues) : 0,
+    };
+  }, [chartData]);
 
   return (
     <div role="img" aria-label={`Bar chart showing FID values over the last ${timeRange}. Average: ${avgFid}ms, ranging from ${minFid}ms to ${maxFid}ms.`}>
@@ -56,7 +65,7 @@ export function FIDChart({ data, timeRange = '24h' }: FIDChartProps) {
         Maximum: {maxFid} milliseconds. 
         Good threshold is 100ms, poor threshold is 300ms.
       </div>
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={400} debounce={300}>
       <BarChart
         data={chartData}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -134,7 +143,7 @@ export function FIDChart({ data, timeRange = '24h' }: FIDChartProps) {
     </ResponsiveContainer>
     </div>
   );
-}
+});
 
 /**
  * Format timestamp based on time range

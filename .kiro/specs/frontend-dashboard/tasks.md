@@ -667,21 +667,21 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
 
 ## Milestone 1.13: Performance Optimization & Polish
 
-- [ ] 13. Optimize bundle size
+- [x] 13. Optimize bundle size
   - Analyze bundle with `npm run build`
   - Implement code splitting for chart components using dynamic imports
   - Verify initial bundle < 150KB gzipped
   - Test: Build completes and bundle sizes are within targets
   - _Requirements: 20.4_
 
-- [ ] 13.1 Add performance optimizations
+- [x] 13.1 Add performance optimizations
   - Memoize expensive computations with useMemo
   - Memoize SiteCard component with React.memo
   - Debounce chart resize events
   - Test: Application feels responsive
   - _Requirements: 20.2, 20.5_
 
-- [ ] 13.2 Run Lighthouse audit
+- [x] 13.2 Run Lighthouse audit
   - Build production version: `npm run build && npm start`
   - Run Lighthouse on dashboard and site details pages
   - Verify Performance score 90+
@@ -690,7 +690,7 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: Lighthouse scores meet targets
   - _Requirements: 20.1_
 
-- [ ] 13.3 Verify accessibility compliance
+- [x] 13.3 Verify accessibility compliance
   - Test keyboard navigation through all interactive elements
   - Verify all images have alt text
   - Verify all form inputs have associated labels
@@ -699,14 +699,14 @@ This implementation plan breaks down the Week 1 Frontend Dashboard into actionab
   - Test: All accessibility requirements met
   - _Requirements: 26.1, 26.2, 26.3, 26.4_
 
-- [ ] 13.4 Add loading states and error handling
+- [x] 13.4 Add loading states and error handling
   - Verify all data fetching shows skeleton loaders
   - Verify all errors display user-friendly messages
   - Verify error boundary catches component errors
   - Test: All loading and error states work correctly
   - _Requirements: 22.1, 22.2, 22.3, 22.4, 22.5_
 
-- [ ] 13.5 Polish UI and responsive design
+- [x] 13.5 Polish UI and responsive design
   - Test on mobile (< 768px), tablet (768-1024px), desktop (> 1024px)
   - Verify no horizontal scrolling on any screen size
   - Verify mobile navigation works correctly

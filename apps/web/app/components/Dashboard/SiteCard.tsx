@@ -21,8 +21,10 @@ export interface SiteCardProps {
 /**
  * SiteCard component displays a summary of a monitored site
  * Shows site name, URL, and latest Core Web Vitals metrics with color-coded badges
+ * 
+ * Memoized to prevent unnecessary re-renders when parent component updates
  */
-export function SiteCard({ site, onClick }: SiteCardProps) {
+export const SiteCard = React.memo(function SiteCard({ site, onClick }: SiteCardProps) {
   const router = useRouter();
 
   const handleClick = () => {
@@ -107,7 +109,7 @@ export function SiteCard({ site, onClick }: SiteCardProps) {
       </div>
     </Card>
   );
-}
+});
 
 /**
  * MetricBadge component displays a single metric with color-coded status

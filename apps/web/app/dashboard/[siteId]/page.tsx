@@ -11,7 +11,8 @@
  * - Charts for each Core Web Vital
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 import { useSite } from '@/lib/react-query/queries/useSites';
 import { useMetrics } from '@/lib/react-query/queries/useMetrics';
@@ -22,9 +23,24 @@ import {
   FilterBar,
   type TimeRange,
 } from '@/app/components/SiteDetails';
-import { LCPChart, FIDChart, CLSChart } from '@/app/components/Charts';
 import { ChartSkeleton } from '@/app/components/UI/Skeleton';
 import type { MetricFilters } from '@webvitals/types';
+
+// Dynamic imports for chart components to reduce initial bundle size
+const LCPChart = dynamic(() => import('@/app/components/Charts/LCPChart').then(mod => ({ default: mod.LCPChart })), {
+  loading: () => <ChartSkeleton />,
+  ssr: false,
+});
+
+const FIDChart = dynamic(() => import('@/app/components/Charts/FIDChart').then(mod => ({ default: mod.FIDChart })), {
+  loading: () => <ChartSkeleton />,
+  ssr: false,
+});
+
+const CLSChart = dynamic(() => import('@/app/components/Charts/CLSChart').then(mod => ({ default: mod.CLSChart })), {
+  loading: () => <ChartSkeleton />,
+  ssr: false,
+});
 
 export default function SiteDetailsPage() {
   const params = useParams();
@@ -45,6 +61,32 @@ export default function SiteDetailsPage() {
   // Fetch site and metrics data
   const { data: site, isLoading: isSiteLoading, error: siteError } = useSite(siteId);
   const { data: metricsData, isLoading: isMetricsLoading, error: metricsError } = useMetrics(siteId, filters);
+
+  // Prepare chart data with memoization to avoid expensive recomputations
+  // Must be called before any conditional returns to follow Rules of Hooks
+  const metrics = useMemo(() => metricsData?.metrics || [], [metricsData?.metrics]);
+  const summary = metricsData?.summary;
+
+  const lcpData = useMemo(() => 
+    metrics
+      .filter((m) => m.lcp !== undefined)
+      .map((m) => ({ timestamp: m.timestamp, lcp: m.lcp! })),
+    [metrics]
+  );
+
+  const fidData = useMemo(() => 
+    metrics
+      .filter((m) => m.fid !== undefined)
+      .map((m) => ({ timestamp: m.timestamp, fid: m.fid! })),
+    [metrics]
+  );
+
+  const clsData = useMemo(() => 
+    metrics
+      .filter((m) => m.cls !== undefined)
+      .map((m) => ({ timestamp: m.timestamp, cls: m.cls! })),
+    [metrics]
+  );
 
   // Handle clear filters
   const handleClearFilters = () => {
@@ -82,22 +124,6 @@ export default function SiteDetailsPage() {
       </div>
     );
   }
-
-  // Prepare chart data
-  const metrics = metricsData?.metrics || [];
-  const summary = metricsData?.summary;
-
-  const lcpData = metrics
-    .filter((m) => m.lcp !== undefined)
-    .map((m) => ({ timestamp: m.timestamp, lcp: m.lcp! }));
-
-  const fidData = metrics
-    .filter((m) => m.fid !== undefined)
-    .map((m) => ({ timestamp: m.timestamp, fid: m.fid! }));
-
-  const clsData = metrics
-    .filter((m) => m.cls !== undefined)
-    .map((m) => ({ timestamp: m.timestamp, cls: m.cls! }));
 
   return (
     <div className="space-y-6">
