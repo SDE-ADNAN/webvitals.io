@@ -630,14 +630,61 @@ rm -rf .next
 npm run build
 ```
 
+#### Redux state not persisting
+
+- Check browser localStorage for `persist:theme` and `persist:user` keys
+- Clear localStorage if corrupted: `localStorage.clear()` in browser console
+- Restart the development server
+
+#### Charts not rendering
+
+- Ensure Recharts is installed: `npm install recharts`
+- Check browser console for errors
+- Verify mock data is being generated correctly
+
+#### Dark mode not working
+
+- Check that theme toggle is dispatching Redux actions
+- Verify `dark` class is being applied to `<html>` element
+- Check Tailwind configuration includes `darkMode: 'class'`
+
+#### Authentication redirect loop
+
+- Clear localStorage: `localStorage.clear()`
+- Check that middleware.ts is configured correctly
+- Verify authentication token is being stored properly
+
+#### Monorepo workspace issues
+
+```bash
+# Clear all node_modules and reinstall
+rm -rf node_modules apps/*/node_modules packages/*/node_modules
+npm install
+
+# Or with pnpm
+pnpm install --force
+```
+
+#### Turborepo cache issues
+
+```bash
+# Clear Turborepo cache
+rm -rf .turbo
+
+# Run build again
+npm run build
+```
+
 ### Getting Help
 
 - **Documentation**: Check [docs/PRD.md](./docs/PRD.md) for detailed specifications
+- **Spec Files**: Review `.kiro/specs/frontend-dashboard/` for requirements and design
 - **Issues**: Open an issue on GitHub with:
   - Clear description of the problem
   - Steps to reproduce
   - Expected vs actual behavior
   - Environment details (Node version, OS, etc.)
+  - Error messages and stack traces
 - **Discussions**: Use GitHub Discussions for questions and ideas
 
 ## 🤝 Contributing
@@ -748,6 +795,156 @@ Node.js version requirements.
 3. Code should follow project conventions
 4. Changes should be well-tested
 
+## 🔌 Week 3 API Integration Guide
+
+The frontend is designed for seamless backend integration. Mock data structures exactly match expected API responses.
+
+### API Integration Checklist
+
+#### 1. Environment Configuration
+
+Update `.env.local`:
+```env
+NEXT_PUBLIC_USE_MOCK_DATA=false
+NEXT_PUBLIC_API_URL=http://localhost:4000/api
+NEXT_PUBLIC_WS_URL=ws://localhost:4000
+```
+
+#### 2. Update React Query Hooks
+
+Replace mock data calls with real API calls:
+
+**Before (Week 1 - Mock Data):**
+```typescript
+// lib/react-query/queries/useSites.ts
+export function useSites() {
+  return useQuery({
+    queryKey: ['sites'],
+    queryFn: async () => {
+      return getMockSites(); // Mock data
+    },
+  });
+}
+```
+
+**After (Week 3 - Real API):**
+```typescript
+// lib/react-query/queries/useSites.ts
+import { apiClient } from '@/lib/api/client';
+
+export function useSites() {
+  return useQuery({
+    queryKey: ['sites'],
+    queryFn: async () => {
+      const response = await apiClient.get<Site[]>('/sites');
+      return response.data;
+    },
+  });
+}
+```
+
+#### 3. API Endpoints to Implement
+
+**Authentication:**
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+- `GET /api/auth/me` - Get current user
+
+**Sites:**
+- `GET /api/sites` - List all sites for user
+- `GET /api/sites/:siteId` - Get site details
+- `POST /api/sites` - Create new site
+- `PUT /api/sites/:siteId` - Update site
+- `DELETE /api/sites/:siteId` - Delete site
+
+**Metrics:**
+- `GET /api/metrics/:siteId` - Get metrics for site (with filters)
+- `POST /api/metrics` - Submit new metric (from tracking SDK)
+- `GET /api/metrics/:siteId/summary` - Get metric summary
+
+**Alerts:**
+- `GET /api/alerts` - List all alerts
+- `POST /api/alerts` - Create alert
+- `PUT /api/alerts/:alertId` - Update alert
+- `DELETE /api/alerts/:alertId` - Delete alert
+
+#### 4. WebSocket Events (Week 4)
+
+**Client → Server:**
+- `subscribe:site` - Subscribe to site metrics
+- `unsubscribe:site` - Unsubscribe from site
+
+**Server → Client:**
+- `metric:received` - New metric received
+- `alert:triggered` - Alert threshold exceeded
+
+#### 5. Data Structure Validation
+
+Mock data types match Prisma schema exactly:
+
+```typescript
+// packages/types/src/site.ts
+export interface Site {
+  id: number;
+  userId: number;
+  name: string;
+  url: string;
+  domain: string;
+  siteId: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// packages/types/src/metric.ts
+export interface Metric {
+  id: number;
+  siteId: number;
+  lcp?: number;
+  fid?: number;
+  cls?: number;
+  ttfb?: number;
+  fcp?: number;
+  tti?: number;
+  deviceType: 'mobile' | 'desktop' | 'tablet';
+  browserName?: string;
+  osName?: string;
+  pageUrl?: string;
+  timestamp: string;
+}
+```
+
+#### 6. Testing API Integration
+
+```bash
+# Start backend API (in separate terminal)
+cd apps/api
+npm run dev
+
+# Start frontend with API integration
+cd apps/web
+npm run dev
+
+# Test endpoints
+curl http://localhost:4000/api/sites
+```
+
+### Migration Steps
+
+1. ✅ **Week 1 Complete**: Frontend with mock data
+2. **Week 3 Tasks**:
+   - [ ] Implement backend API endpoints
+   - [ ] Update React Query hooks to use real API
+   - [ ] Test authentication flow
+   - [ ] Test site management
+   - [ ] Test metrics display
+   - [ ] Verify error handling
+3. **Week 4 Tasks**:
+   - [ ] Implement WebSocket connections
+   - [ ] Add real-time metric updates
+   - [ ] Deploy to production
+
 ## 📚 Additional Resources
 
 ### Documentation
@@ -772,34 +969,45 @@ Node.js version requirements.
 
 ### Completed ✅
 
-- Project scaffolding and configuration
-- Development tooling (ESLint, Prettier, TypeScript)
-- CI/CD pipeline with GitHub Actions
-- Environment configuration
-- Git repository structure
-- Comprehensive project documentation
+**Week 1 - Frontend Dashboard Foundation (Complete)**
 
-### In Progress 🚧
-
-- **Monorepo/Turborepo migration** (Task 1.7 - Next Priority)
-- Core infrastructure and state management
-- Mock data and utilities
-- Base UI components
-- Layout components
-- Dashboard pages
+- ✅ Project scaffolding and configuration
+- ✅ Monorepo/Turborepo structure with multi-platform support
+- ✅ Development tooling (ESLint, Prettier, TypeScript)
+- ✅ CI/CD pipeline with GitHub Actions
+- ✅ Environment configuration
+- ✅ Git repository structure
+- ✅ Redux Toolkit state management (theme, user, UI)
+- ✅ React Query server state management
+- ✅ Mock data infrastructure
+- ✅ Base UI components (Button, Input, Card, Badge, Modal)
+- ✅ Layout components (Sidebar, Header, MainLayout, MobileNav)
+- ✅ Dashboard overview page with site cards
+- ✅ Site details page with metrics and charts
+- ✅ Time range and filter controls
+- ✅ Authentication pages (login/signup)
+- ✅ Dark/light theme with persistence
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Accessibility compliance (WCAG 2.1 AA)
+- ✅ Property-based testing with fast-check
+- ✅ Landing page with features section
+- ✅ Comprehensive documentation
 
 ### Upcoming 📋
 
-- **Multi-platform support** (iOS/Android via React Native)
-- **Separate API deployment** (Express.js backend independent from Next.js)
-- Authentication system
-- Site management
-- Real-time metrics visualization
-- Alert configuration
-- Backend API integration
+**Week 3 - Backend API Integration**
+- Backend API development (Node.js/Express)
+- PostgreSQL database with Prisma ORM
+- JWT authentication
+- Site and metrics APIs
+- Replace mock data with real API calls
+
+**Week 4 - Real-Time Features & Deployment**
 - WebSocket real-time updates
-- Tracking SDK
-- Production deployment
+- Tracking SDK development
+- Alert system
+- Production deployment to AWS
+- Docker containerization
 
 See [PRD.md](./docs/PRD.md) for the complete product roadmap and future features.
 
@@ -828,10 +1036,12 @@ MIT License - see [LICENSE](./LICENSE) file for details.
 
 ---
 
-**Status**: 🚧 In Development (Milestone 1.1 Complete - 6/6 tasks done)
+**Status**: ✅ Week 1 Complete - Ready for Week 3 API Integration
 
-**Current Phase**: Week 1 - Frontend Dashboard Foundation
+**Current Phase**: Week 1 - Frontend Dashboard Foundation (Complete)
+
+**Next Phase**: Week 3 - Backend API Development
 
 **Target Release**: January 11, 2026
 
-**Last Updated**: December 15, 2025
+**Last Updated**: December 19, 2025

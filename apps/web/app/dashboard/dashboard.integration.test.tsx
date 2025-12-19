@@ -2,6 +2,8 @@
  * Integration tests for dashboard user flows
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -134,7 +136,7 @@ describe("Dashboard Integration Tests", () => {
         error: null,
         isError: false,
         isSuccess: true,
-      } as ReturnType<typeof useSites>);
+      } as any);
 
       renderWithProviders(<DashboardPage />);
 

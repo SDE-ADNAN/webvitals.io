@@ -2,6 +2,8 @@
  * Unit tests for UI slice
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { describe, it, expect } from "vitest";
 import uiReducer, {
   toggleSidebar,
@@ -40,7 +42,7 @@ describe("uiSlice", () => {
     });
 
     it("should toggle back and forth correctly", () => {
-      let state = { ...initialState, sidebarOpen: true };
+      let state = { ...initialState, sidebarOpen: true, activeModal: null as string | null };
       state = uiReducer(state, toggleSidebar());
       expect(state.sidebarOpen).toBe(false);
       state = uiReducer(state, toggleSidebar());
@@ -73,7 +75,7 @@ describe("uiSlice", () => {
     });
 
     it("should toggle back and forth correctly", () => {
-      let state = { ...initialState, mobileMenuOpen: false };
+      let state = { ...initialState, mobileMenuOpen: false, activeModal: null as string | null };
       state = uiReducer(state, toggleMobileMenu());
       expect(state.mobileMenuOpen).toBe(true);
       state = uiReducer(state, toggleMobileMenu());
@@ -142,18 +144,18 @@ describe("uiSlice", () => {
 
   describe("selectors", () => {
     const mockState = {
-      theme: { mode: "light" as const },
-      user: { user: null, token: null, isAuthenticated: false, isLoading: false },
+      theme: { mode: "light" as const, _persist: { version: -1, rehydrated: true } },
+      user: { user: null, token: null, isAuthenticated: false, isLoading: false, _persist: { version: -1, rehydrated: true } },
       ui: {
         sidebarOpen: false,
         mobileMenuOpen: true,
-        activeModal: "test-modal",
+        activeModal: "test-modal" as string | null,
       },
     };
 
     describe("selectSidebarOpen", () => {
       it("should select sidebar open state", () => {
-        expect(selectSidebarOpen(mockState)).toBe(false);
+        expect(selectSidebarOpen(mockState as any)).toBe(false);
       });
 
       it("should return true when sidebar is open", () => {
@@ -161,13 +163,13 @@ describe("uiSlice", () => {
           ...mockState,
           ui: { ...mockState.ui, sidebarOpen: true },
         };
-        expect(selectSidebarOpen(state)).toBe(true);
+        expect(selectSidebarOpen(state as any)).toBe(true);
       });
     });
 
     describe("selectMobileMenuOpen", () => {
       it("should select mobile menu open state", () => {
-        expect(selectMobileMenuOpen(mockState)).toBe(true);
+        expect(selectMobileMenuOpen(mockState as any)).toBe(true);
       });
 
       it("should return false when mobile menu is closed", () => {
@@ -175,13 +177,13 @@ describe("uiSlice", () => {
           ...mockState,
           ui: { ...mockState.ui, mobileMenuOpen: false },
         };
-        expect(selectMobileMenuOpen(state)).toBe(false);
+        expect(selectMobileMenuOpen(state as any)).toBe(false);
       });
     });
 
     describe("selectActiveModal", () => {
       it("should select active modal", () => {
-        expect(selectActiveModal(mockState)).toBe("test-modal");
+        expect(selectActiveModal(mockState as any)).toBe("test-modal");
       });
 
       it("should return null when no modal is active", () => {
@@ -189,7 +191,7 @@ describe("uiSlice", () => {
           ...mockState,
           ui: { ...mockState.ui, activeModal: null },
         };
-        expect(selectActiveModal(state)).toBeNull();
+        expect(selectActiveModal(state as any)).toBeNull();
       });
     });
   });

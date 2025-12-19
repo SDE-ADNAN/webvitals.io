@@ -2,6 +2,8 @@
  * Integration tests for theme toggle persistence
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -35,7 +37,7 @@ describe("Theme Toggle Integration Tests", () => {
 
     return configureStore({
       reducer: {
-        theme: persistReducer(themePersistConfig, themeReducer),
+        theme: persistReducer(themePersistConfig, themeReducer) as any,
         user: userReducer,
         ui: uiReducer,
       },
@@ -63,7 +65,7 @@ describe("Theme Toggle Integration Tests", () => {
     it("should start with light theme by default", () => {
       const { store } = renderWithStore(<ThemeToggle />);
 
-      expect(store.getState().theme.mode).toBe("light");
+      expect((store.getState() as any).theme.mode).toBe("light");
     });
 
     it("should toggle theme from light to dark", async () => {
@@ -73,7 +75,7 @@ describe("Theme Toggle Integration Tests", () => {
       const toggleButton = screen.getByRole("button", { name: /switch to dark mode/i });
       await user.click(toggleButton);
 
-      expect(store.getState().theme.mode).toBe("dark");
+      expect((store.getState() as any).theme.mode).toBe("dark");
     });
 
     it("should toggle theme from dark to light", async () => {
@@ -83,12 +85,12 @@ describe("Theme Toggle Integration Tests", () => {
       // Toggle to dark
       let toggleButton = screen.getByRole("button", { name: /switch to dark mode/i });
       await user.click(toggleButton);
-      expect(store.getState().theme.mode).toBe("dark");
+      expect((store.getState() as any).theme.mode).toBe("dark");
 
       // Toggle back to light (button label changes)
       toggleButton = screen.getByRole("button", { name: /switch to light mode/i });
       await user.click(toggleButton);
-      expect(store.getState().theme.mode).toBe("light");
+      expect((store.getState() as any).theme.mode).toBe("light");
     });
 
     it("should persist theme preference in localStorage", async () => {
@@ -121,7 +123,7 @@ describe("Theme Toggle Integration Tests", () => {
       const { store } = renderWithStore(<ThemeToggle />);
       
       // Verify initial state
-      expect(store.getState().theme.mode).toBe("light");
+      expect((store.getState() as any).theme.mode).toBe("light");
     });
   });
 });

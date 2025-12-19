@@ -2,6 +2,8 @@
  * Unit tests for theme slice
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { describe, it, expect } from "vitest";
 import themeReducer, { toggleTheme, setTheme, selectThemeMode } from "./themeSlice";
 
@@ -30,7 +32,7 @@ describe("themeSlice", () => {
     });
 
     it("should toggle back and forth correctly", () => {
-      let state = { mode: "light" as const };
+      let state = { mode: "light" as "light" | "dark" };
       state = themeReducer(state, toggleTheme());
       expect(state.mode).toBe("dark");
       state = themeReducer(state, toggleTheme());
@@ -61,20 +63,20 @@ describe("themeSlice", () => {
   describe("selectThemeMode selector", () => {
     it("should select the theme mode", () => {
       const state = {
-        theme: { mode: "dark" as const },
-        user: { user: null, token: null, isAuthenticated: false, isLoading: false },
+        theme: { mode: "dark" as const, _persist: { version: -1, rehydrated: true } },
+        user: { user: null, token: null, isAuthenticated: false, isLoading: false, _persist: { version: -1, rehydrated: true } },
         ui: { sidebarOpen: true, mobileMenuOpen: false, activeModal: null },
       };
-      expect(selectThemeMode(state)).toBe("dark");
+      expect(selectThemeMode(state as any)).toBe("dark");
     });
 
     it("should select light mode", () => {
       const state = {
-        theme: { mode: "light" as const },
-        user: { user: null, token: null, isAuthenticated: false, isLoading: false },
+        theme: { mode: "light" as const, _persist: { version: -1, rehydrated: true } },
+        user: { user: null, token: null, isAuthenticated: false, isLoading: false, _persist: { version: -1, rehydrated: true } },
         ui: { sidebarOpen: true, mobileMenuOpen: false, activeModal: null },
       };
-      expect(selectThemeMode(state)).toBe("light");
+      expect(selectThemeMode(state as any)).toBe("light");
     });
   });
 });

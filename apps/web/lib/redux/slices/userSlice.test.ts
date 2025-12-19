@@ -2,6 +2,8 @@
  * Unit tests for user slice
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { describe, it, expect } from "vitest";
 import userReducer, {
   setUser,
@@ -137,19 +139,20 @@ describe("userSlice", () => {
 
   describe("selectors", () => {
     const mockState = {
-      theme: { mode: "light" as const },
+      theme: { mode: "light" as const, _persist: { version: -1, rehydrated: true } },
       user: {
         user: mockUser,
         token: "test-token",
         isAuthenticated: true,
         isLoading: false,
+        _persist: { version: -1, rehydrated: true },
       },
       ui: { sidebarOpen: true, mobileMenuOpen: false, activeModal: null },
     };
 
     describe("selectUser", () => {
       it("should select the user", () => {
-        expect(selectUser(mockState)).toEqual(mockUser);
+        expect(selectUser(mockState as any)).toEqual(mockUser);
       });
 
       it("should return null when no user", () => {
@@ -157,13 +160,13 @@ describe("userSlice", () => {
           ...mockState,
           user: { ...mockState.user, user: null },
         };
-        expect(selectUser(state)).toBeNull();
+        expect(selectUser(state as any)).toBeNull();
       });
     });
 
     describe("selectIsAuthenticated", () => {
       it("should select authentication status", () => {
-        expect(selectIsAuthenticated(mockState)).toBe(true);
+        expect(selectIsAuthenticated(mockState as any)).toBe(true);
       });
 
       it("should return false when not authenticated", () => {
@@ -171,7 +174,7 @@ describe("userSlice", () => {
           ...mockState,
           user: { ...mockState.user, isAuthenticated: false },
         };
-        expect(selectIsAuthenticated(state)).toBe(false);
+        expect(selectIsAuthenticated(state as any)).toBe(false);
       });
     });
   });
