@@ -49,7 +49,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 2: Database Setup with Prisma
 
-- [ ] 2. Initialize Prisma ORM
+- [x] 2. Initialize Prisma ORM
   - Install prisma and @prisma/client
   - Run `npx prisma init`
   - Configure DATABASE_URL in .env
@@ -57,21 +57,21 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Add User, Site, Metric, Alert models with relationships
   - _Requirements: 2.1, 2.2_
 
-- [ ] 2.1 Create initial database migration
+- [x] 2.1 Create initial database migration
   - Run `npx prisma migrate dev --name init`
   - Verify all tables created with proper relationships
   - Verify indexes on email, siteId, userId, timestamp
   - Test: Database schema matches design document
   - _Requirements: 2.3, 28.1, 28.2_
 
-- [ ] 2.2 Create Prisma client singleton
+- [x] 2.2 Create Prisma client singleton
   - Create src/lib/prisma.ts with singleton pattern
   - Export prisma client for use across services
   - Add connection error handling
   - Test: Can query database successfully
   - _Requirements: 2.4, 25.1_
 
-- [ ] 2.3 Create database seed script
+- [x] 2.3 Create database seed script
   - Create prisma/seed.ts with test users and sites
   - Add seed script to package.json
   - Include sample metrics and alerts

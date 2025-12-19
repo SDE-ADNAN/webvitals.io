@@ -3,6 +3,11 @@ import cors from "cors";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import { env } from "./config/env";
+import {
+  connectDatabase,
+  disconnectDatabase,
+  testDatabaseConnection,
+} from "./lib/prisma";
 
 const app = express();
 
@@ -43,19 +48,55 @@ const limiter = rateLimit({
 // Apply rate limiting to all routes
 app.use(limiter);
 
-// Health check endpoint
-app.get("/api/health", (req, res) => {
+// Health check endpoint with database connectivity check
+app.get("/api/health", async (req, res) => {
+  const dbConnected = await testDatabaseConnection();
+
+  if (!dbConnected) {
+    return res.status(503).json({
+      status: "error",
+      message: "Database is unreachable",
+      uptime: process.uptime(),
+      timestamp: new Date().toISOString(),
+    });
+  }
+
   res.json({
     status: "ok",
     message: "API server is running",
+    database: "connected",
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
   });
 });
 
-// Start server
-app.listen(env.PORT, () => {
-  console.log(`🚀 API server listening on port ${env.PORT}`);
-  console.log(`📝 Environment: ${env.NODE_ENV}`);
-  console.log(`🌐 CORS enabled for: ${env.FRONTEND_URL}`);
-});
+// Graceful shutdown handler
+const gracefulShutdown = async (signal: string) => {
+  console.log(`\n${signal} received. Starting graceful shutdown...`);
+  await disconnectDatabase();
+  process.exit(0);
+};
+
+// Register shutdown handlers
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+
+// Start server with database connection
+async function startServer() {
+  try {
+    // Connect to database
+    await connectDatabase();
+
+    // Start Express server
+    app.listen(env.PORT, () => {
+      console.log(`🚀 API server listening on port ${env.PORT}`);
+      console.log(`📝 Environment: ${env.NODE_ENV}`);
+      console.log(`🌐 CORS enabled for: ${env.FRONTEND_URL}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+}
+
+startServer();
