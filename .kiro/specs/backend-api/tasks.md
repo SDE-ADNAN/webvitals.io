@@ -82,19 +82,19 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 3: Authentication System
 
-- [ ] 3. Implement password hashing utilities
+- [x] 3. Implement password hashing utilities
   - Install bcrypt and @types/bcrypt
   - Create src/utils/password.ts with hash and compare functions
   - Use 10 salt rounds for bcrypt
   - Test: Password hashing and comparison works
   - _Requirements: 20.1, 20.2_
 
-- [ ]* 3.1 Write property test for password hashing
+- [x] 3.1 Write property test for password hashing
   - **Property 1: Password Hashing**
   - For any password, it should be hashed before storage and never returned in responses
   - **Validates: Requirements 20.1, 20.3**
 
-- [ ] 3.2 Implement JWT utilities
+- [x] 3.2 Implement JWT utilities
   - Install jsonwebtoken and @types/jsonwebtoken
   - Create src/utils/jwt.ts with sign and verify functions
   - Include userId and email in token payload
@@ -102,12 +102,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test: Token generation and verification works
   - _Requirements: 5.1, 5.2_
 
-- [ ]* 3.3 Write property test for JWT validation
+- [x] 3.3 Write property test for JWT validation
   - **Property 2: JWT Token Validation**
   - For any protected endpoint request, a valid JWT token should be required
   - **Validates: Requirements 5.3**
 
-- [ ] 3.4 Create authentication middleware
+- [x] 3.4 Create authentication middleware
   - Create src/middleware/auth.ts
   - Extract token from Authorization header (Bearer format)
   - Verify JWT token and attach user to request
@@ -115,7 +115,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test: Protected routes require valid token
   - _Requirements: 5.3, 5.4, 5.5_
 
-- [ ] 3.5 Implement user registration
+- [x] 3.5 Implement user registration
   - Create src/controllers/authController.ts
   - Create src/services/authService.ts
   - Implement POST /api/auth/register endpoint
@@ -125,12 +125,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return JWT token and user object (without password)
   - _Requirements: 3.1-3.5_
 
-- [ ]* 3.6 Write property test for duplicate email prevention
+- [x] 3.6 Write property test for duplicate email prevention
   - **Property 19: Duplicate Email Prevention**
   - For any registration with existing email, system should return 409
   - **Validates: Requirements 3.3**
 
-- [ ] 3.7 Implement user login
+- [x] 3.7 Implement user login
   - Implement POST /api/auth/login endpoint
   - Validate email and password provided
   - Compare password hash with bcrypt
@@ -138,14 +138,14 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Generate and return JWT token with user object
   - _Requirements: 4.1-4.5_
 
-- [ ] 3.8 Implement get current user endpoint
+- [x] 3.8 Implement get current user endpoint
   - Implement GET /api/auth/me endpoint
   - Require authentication middleware
   - Return current user from token (without password)
   - Test: Returns authenticated user details
   - _Requirements: 5.3_
 
-- [ ]* 3.9 Write property test for password exclusion
+- [x] 3.9 Write property test for password exclusion
   - **Property 18: Password Exclusion from Responses**
   - For any user object in API response, password hash should never be included
   - **Validates: Requirements 20.3**

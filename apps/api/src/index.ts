@@ -8,6 +8,7 @@ import {
   disconnectDatabase,
   testDatabaseConnection,
 } from "./lib/prisma";
+import authRoutes from "./routes/authRoutes";
 
 const app = express();
 
@@ -47,6 +48,9 @@ const limiter = rateLimit({
 
 // Apply rate limiting to all routes
 app.use(limiter);
+
+// API Routes
+app.use("/api/auth", authRoutes);
 
 // Health check endpoint with database connectivity check
 app.get("/api/health", async (req, res) => {
