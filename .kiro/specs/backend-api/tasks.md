@@ -154,40 +154,40 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 4: Input Validation with Zod
 
-- [ ] 4. Set up Zod validation infrastructure
+- [x] 4. Set up Zod validation infrastructure
   - Install zod
   - Create src/middleware/validate.ts for validation middleware
   - Create validation error formatter
   - Return 400 with field-specific errors on validation failure
   - _Requirements: 18.1-18.5_
 
-- [ ]* 4.1 Write property test for input validation
+- [x] 4.1 Write property test for input validation
   - **Property 4: Input Validation**
   - For any API request with body, input should be validated against schemas
   - **Validates: Requirements 18.1**
 
-- [ ] 4.2 Create authentication validation schemas
+- [x] 4.2 Create authentication validation schemas
   - Create src/validators/authValidators.ts
   - Define registerSchema (email, password, firstName, lastName)
   - Define loginSchema (email, password)
   - Email must be valid format, password min 8 characters
   - _Requirements: 3.1, 3.2, 4.1_
 
-- [ ] 4.3 Create site validation schemas
+- [x] 4.3 Create site validation schemas
   - Create src/validators/siteValidators.ts
   - Define createSiteSchema (name 3-50 chars, url format)
   - Define updateSiteSchema (name, url, isActive optional)
   - Validate URL format with Zod
   - _Requirements: 6.2, 6.3, 9.3_
 
-- [ ] 4.4 Create metric validation schemas
+- [x] 4.4 Create metric validation schemas
   - Create src/validators/metricValidators.ts
   - Define metricSchema for submission
   - Validate numeric values for lcp, fid, cls, ttfb, fcp, tti
   - Validate deviceType, browserName, osName strings
   - _Requirements: 11.3_
 
-- [ ] 4.5 Create alert validation schemas
+- [x] 4.5 Create alert validation schemas
   - Create src/validators/alertValidators.ts
   - Define createAlertSchema (metricType, threshold, condition)
   - Define updateAlertSchema (threshold, condition, isActive optional)
@@ -195,7 +195,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Validate condition enum (greater_than, less_than)
   - _Requirements: 14.3, 14.4, 14.5_
 
-- [ ]* 4.6 Write property test for validation error details
+- [x] 4.6 Write property test for validation error details
   - **Property 23: Validation Error Field Details**
   - For any validation error, response should include specific invalid fields
   - **Validates: Requirements 18.3**
@@ -222,7 +222,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Include all site properties
   - _Requirements: 7.1-7.5_
 
-- [ ]* 5.2 Write property test for empty array response
+- [ ] 5.2 Write property test for empty array response
   - **Property 22: Empty Array for No Results**
   - For any list operation with no results, system should return empty array
   - **Validates: Requirements 7.4, 15.4**
@@ -235,12 +235,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return all site properties
   - _Requirements: 8.1-8.5_
 
-- [ ]* 5.4 Write property test for ownership verification
+- [ ] 5.4 Write property test for ownership verification
   - **Property 3: User Ownership Verification**
   - For any site/alert operation, system should verify authenticated user owns resource
   - **Validates: Requirements 8.2, 9.2, 10.2, 16.2, 17.2**
 
-- [ ]* 5.5 Write property test for site ownership errors
+- [ ] 5.5 Write property test for site ownership errors
   - **Property 20: Site Ownership Verification**
   - For any site operation, if user doesn't own site, return 403
   - **Validates: Requirements 8.4, 9.2, 10.2**
@@ -260,7 +260,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return success message
   - _Requirements: 10.1-10.5_
 
-- [ ]* 5.8 Write property test for cascade deletion
+- [ ] 5.8 Write property test for cascade deletion
   - **Property 7: Site Deletion Cascade**
   - For any site deletion, all associated metrics and alerts should be deleted
   - **Validates: Requirements 10.3, 10.4**
@@ -297,7 +297,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Apply calculations only to filtered data
   - _Requirements: 13.1-13.5_
 
-- [ ]* 6.3 Write property test for summary calculation
+- [ ] 6.3 Write property test for summary calculation
   - **Property 6: Metric Summary Calculation**
   - For any metrics retrieval, summary stats should be calculated from filtered dataset
   - **Validates: Requirements 13.1, 13.2**
@@ -347,7 +347,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return success message
   - _Requirements: 17.1-17.5_
 
-- [ ]* 7.4 Write property test for alert ownership
+- [ ] 7.4 Write property test for alert ownership
   - **Property 21: Alert Ownership Verification**
   - For any alert operation, if user doesn't own alert, return 403
   - **Validates: Requirements 16.2, 17.2**
@@ -369,12 +369,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Hide internal details in production
   - _Requirements: 19.1-19.5_
 
-- [ ]* 8.1 Write property test for error response format
+- [ ] 8.1 Write property test for error response format
   - **Property 5: Error Response Format**
   - For any error, API should return JSON with message and appropriate status code
   - **Validates: Requirements 19.1, 19.2**
 
-- [ ]* 8.2 Write property test for production error sanitization
+- [ ] 8.2 Write property test for production error sanitization
   - **Property 24: Production Error Sanitization**
   - For any unexpected error in production, return 500 without internal details
   - **Validates: Requirements 19.5, 27.3**
@@ -387,12 +387,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Include Retry-After header in response
   - _Requirements: 22.1-22.5_
 
-- [ ]* 8.4 Write property test for rate limit enforcement
+- [ ] 8.4 Write property test for rate limit enforcement
   - **Property 8: Rate Limit Enforcement**
   - For any IP exceeding 100 requests per 15 minutes, return 429
   - **Validates: Requirements 22.2, 22.3**
 
-- [ ]* 8.5 Write property test for Retry-After header
+- [ ] 8.5 Write property test for Retry-After header
   - **Property 9: Retry-After Header on Rate Limit**
   - For any rate limit exceeded request, response should include Retry-After header
   - **Validates: Requirements 22.4**
@@ -405,12 +405,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Exclude /api/health from logs
   - _Requirements: 23.1, 23.2_
 
-- [ ]* 8.7 Write property test for request logging
+- [ ] 8.7 Write property test for request logging
   - **Property 16: Request Logging**
   - For any HTTP request, system should log method, path, and timestamp
   - **Validates: Requirements 23.1**
 
-- [ ]* 8.8 Write property test for error logging
+- [ ] 8.8 Write property test for error logging
   - **Property 17: Error Logging with Stack Trace**
   - For any error, system should log error message and stack trace
   - **Validates: Requirements 19.3, 23.3**
@@ -427,7 +427,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Exclude from authentication and rate limiting
   - _Requirements: 24.1-24.5_
 
-- [ ]* 9.1 Write property test for health check database verification
+- [ ] 9.1 Write property test for health check database verification
   - **Property 10: Health Check Database Verification**
   - For any health check, if database unreachable, return 503
   - **Validates: Requirements 24.2, 24.3**
@@ -440,7 +440,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Log database errors with context
   - _Requirements: 25.1-25.5_
 
-- [ ]* 9.3 Write property test for database retry
+- [ ] 9.3 Write property test for database retry
   - **Property 11: Database Connection Retry**
   - For any failed database query, retry up to 3 times with exponential backoff
   - **Validates: Requirements 25.3**
@@ -457,12 +457,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Add pagination support (page, limit, total) for list endpoints
   - _Requirements: 26.1-26.5_
 
-- [ ]* 10.1 Write property test for response status codes
+- [ ] 10.1 Write property test for response status codes
   - **Property 12: Consistent Response Format**
   - For any successful API response, status code should be 200 or 201
   - **Validates: Requirements 26.1**
 
-- [ ]* 10.2 Write property test for timestamp format
+- [ ] 10.2 Write property test for timestamp format
   - **Property 13: ISO 8601 Timestamp Format**
   - For any response with timestamps, they should be in ISO 8601 format
   - **Validates: Requirements 26.5**
@@ -479,7 +479,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Load configuration from .env file
   - _Requirements: 27.1-27.5_
 
-- [ ]* 11.1 Write property test for environment validation
+- [ ] 11.1 Write property test for environment validation
   - **Property 14: Environment Variable Validation**
   - For any server startup, if required variables missing, fail with clear error
   - **Validates: Requirements 27.4, 27.5**
@@ -496,7 +496,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test migration failure handling
   - _Requirements: 28.1-28.5_
 
-- [ ]* 12.1 Write property test for migration rollback
+- [ ] 12.1 Write property test for migration rollback
   - **Property 15: Migration Rollback on Failure**
   - For any failed migration, system should rollback transaction
   - **Validates: Requirements 28.3**
@@ -513,7 +513,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Add test scripts to package.json (test, test:watch, test:coverage)
   - _Requirements: 30.1-30.5_
 
-- [ ]* 13.1 Write unit tests for authentication service
+- [ ] 13.1 Write unit tests for authentication service
   - Test password hashing and comparison
   - Test JWT generation and verification
   - Test login validation logic
@@ -521,7 +521,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test duplicate email handling
   - _Requirements: 3.1-3.5, 4.1-4.5_
 
-- [ ]* 13.2 Write integration tests for auth endpoints
+- [ ] 13.2 Write integration tests for auth endpoints
   - Test POST /api/auth/register
   - Test POST /api/auth/login
   - Test GET /api/auth/me
@@ -529,7 +529,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test expired tokens
   - _Requirements: 3.1-5.5_
 
-- [ ]* 13.3 Write integration tests for site endpoints
+- [ ] 13.3 Write integration tests for site endpoints
   - Test GET /api/sites
   - Test POST /api/sites
   - Test GET /api/sites/:siteId
@@ -538,14 +538,14 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test ownership verification
   - _Requirements: 6.1-10.5_
 
-- [ ]* 13.4 Write integration tests for metrics endpoints
+- [ ] 13.4 Write integration tests for metrics endpoints
   - Test POST /api/metrics
   - Test GET /api/metrics/:siteId
   - Test filtering by timeRange, deviceType, browser
   - Test summary calculation
   - _Requirements: 11.1-13.5_
 
-- [ ]* 13.5 Write integration tests for alert endpoints
+- [ ] 13.5 Write integration tests for alert endpoints
   - Test GET /api/alerts
   - Test POST /api/alerts
   - Test PUT /api/alerts/:alertId
@@ -586,7 +586,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Provide TypeScript types for all responses
   - _Requirements: Integration_
 
-- [ ]* 15.2 End-to-end integration testing
+- [ ] 15.2 End-to-end integration testing
   - Test register → login → create site flow
   - Test site management CRUD operations
   - Test metrics submission and retrieval
