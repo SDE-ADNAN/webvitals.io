@@ -9,6 +9,7 @@ import {
   testDatabaseConnection,
 } from "./lib/prisma";
 import authRoutes from "./routes/authRoutes";
+import siteRoutes from "./routes/siteRoutes";
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use(limiter);
 
 // API Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/sites", siteRoutes);
 
 // Health check endpoint with database connectivity check
 app.get("/api/health", async (req, res) => {

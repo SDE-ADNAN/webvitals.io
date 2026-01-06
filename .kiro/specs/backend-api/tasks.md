@@ -204,7 +204,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 5: Site Management Endpoints
 
-- [ ] 5. Implement create site endpoint
+- [x] 5. Implement create site endpoint
   - Create src/controllers/siteController.ts
   - Create src/services/siteService.ts
   - Implement POST /api/sites with authentication
@@ -214,7 +214,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return created site object
   - _Requirements: 6.1-6.5_
 
-- [ ] 5.1 Implement list sites endpoint
+- [x] 5.1 Implement list sites endpoint
   - Implement GET /api/sites with authentication
   - Filter sites by authenticated user's ID
   - Order by createdAt descending
@@ -222,12 +222,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Include all site properties
   - _Requirements: 7.1-7.5_
 
-- [ ] 5.2 Write property test for empty array response
+- [x] 5.2 Write property test for empty array response
   - **Property 22: Empty Array for No Results**
   - For any list operation with no results, system should return empty array
   - **Validates: Requirements 7.4, 15.4**
 
-- [ ] 5.3 Implement get site details endpoint
+- [x] 5.3 Implement get site details endpoint
   - Implement GET /api/sites/:siteId with authentication
   - Verify user owns the site
   - Return 404 if site not found
@@ -235,17 +235,17 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return all site properties
   - _Requirements: 8.1-8.5_
 
-- [ ] 5.4 Write property test for ownership verification
+- [x] 5.4 Write property test for ownership verification
   - **Property 3: User Ownership Verification**
   - For any site/alert operation, system should verify authenticated user owns resource
   - **Validates: Requirements 8.2, 9.2, 10.2, 16.2, 17.2**
 
-- [ ] 5.5 Write property test for site ownership errors
+- [x] 5.5 Write property test for site ownership errors
   - **Property 20: Site Ownership Verification**
   - For any site operation, if user doesn't own site, return 403
   - **Validates: Requirements 8.4, 9.2, 10.2**
 
-- [ ] 5.6 Implement update site endpoint
+- [x] 5.6 Implement update site endpoint
   - Implement PUT /api/sites/:siteId with authentication
   - Verify user owns the site
   - Allow updating name, url, isActive
@@ -253,14 +253,14 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return updated site object
   - _Requirements: 9.1-9.5_
 
-- [ ] 5.7 Implement delete site endpoint
+- [x] 5.7 Implement delete site endpoint
   - Implement DELETE /api/sites/:siteId with authentication
   - Verify user owns the site
   - Delete site with cascade to metrics and alerts
   - Return success message
   - _Requirements: 10.1-10.5_
 
-- [ ] 5.8 Write property test for cascade deletion
+- [x] 5.8 Write property test for cascade deletion
   - **Property 7: Site Deletion Cascade**
   - For any site deletion, all associated metrics and alerts should be deleted
   - **Validates: Requirements 10.3, 10.4**
