@@ -1,0 +1,13 @@
+{
+  "name": "@webvitals/config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./index.js",
+  "files": [
+    "eslint-preset.js",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "lint": "echo 'No linting needed for config package'"
+  }
+}
