@@ -313,7 +313,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 7: Alert Management Endpoints
 
-- [ ] 7. Implement create alert endpoint
+- [x] 7. Implement create alert endpoint
   - Create src/controllers/alertController.ts
   - Create src/services/alertService.ts
   - Implement POST /api/alerts with authentication
@@ -323,7 +323,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return created alert object
   - _Requirements: 14.1-14.5_
 
-- [ ] 7.1 Implement list alerts endpoint
+- [x] 7.1 Implement list alerts endpoint
   - Implement GET /api/alerts with authentication
   - Filter alerts by authenticated user's ID
   - Order by createdAt descending
@@ -331,7 +331,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Include all alert properties
   - _Requirements: 15.1-15.5_
 
-- [ ] 7.2 Implement update alert endpoint
+- [x] 7.2 Implement update alert endpoint
   - Implement PUT /api/alerts/:alertId with authentication
   - Verify user owns the alert
   - Allow updating threshold, condition, isActive
@@ -339,7 +339,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return updated alert object
   - _Requirements: 16.1-16.5_
 
-- [ ] 7.3 Implement delete alert endpoint
+- [x] 7.3 Implement delete alert endpoint
   - Implement DELETE /api/alerts/:alertId with authentication
   - Verify user owns the alert
   - Return 404 if alert not found
@@ -347,7 +347,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return success message
   - _Requirements: 17.1-17.5_
 
-- [ ] 7.4 Write property test for alert ownership
+- [x] 7.4 Write property test for alert ownership
   - **Property 21: Alert Ownership Verification**
   - For any alert operation, if user doesn't own alert, return 403
   - **Validates: Requirements 16.2, 17.2**

@@ -11,6 +11,7 @@ import {
 import authRoutes from "./routes/authRoutes";
 import siteRoutes from "./routes/siteRoutes";
 import metricRoutes from "./routes/metricRoutes";
+import alertRoutes from "./routes/alertRoutes";
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use(limiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/sites", siteRoutes);
 app.use("/api/metrics", metricRoutes);
+app.use("/api/alerts", alertRoutes);
 
 // Health check endpoint with database connectivity check
 app.get("/api/health", async (req, res) => {
