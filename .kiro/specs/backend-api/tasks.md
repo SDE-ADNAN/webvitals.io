@@ -269,7 +269,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 6: Metrics Collection & Retrieval
 
-- [ ] 6. Implement submit metric endpoint
+- [x] 6. Implement submit metric endpoint
   - Create src/controllers/metricController.ts
   - Create src/services/metricService.ts
   - Implement POST /api/metrics (public endpoint)
@@ -279,7 +279,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return success response immediately
   - _Requirements: 11.1-11.5_
 
-- [ ] 6.1 Implement get metrics endpoint with filters
+- [x] 6.1 Implement get metrics endpoint with filters
   - Implement GET /api/metrics/:siteId with authentication
   - Verify user owns the site
   - Support timeRange query param (24h, 7d, 30d)
@@ -288,7 +288,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Return filtered metrics array
   - _Requirements: 12.1-12.5_
 
-- [ ] 6.2 Implement metrics summary calculation
+- [x] 6.2 Implement metrics summary calculation
   - Create summary calculation utility
   - Calculate average for lcp, fid, cls
   - Calculate 95th percentile for lcp, fid, cls
@@ -297,12 +297,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Apply calculations only to filtered data
   - _Requirements: 13.1-13.5_
 
-- [ ] 6.3 Write property test for summary calculation
+- [x] 6.3 Write property test for summary calculation
   - **Property 6: Metric Summary Calculation**
   - For any metrics retrieval, summary stats should be calculated from filtered dataset
   - **Validates: Requirements 13.1, 13.2**
 
-- [ ] 6.4 Implement get metrics summary endpoint
+- [x] 6.4 Implement get metrics summary endpoint
   - Implement GET /api/metrics/:siteId/summary with authentication
   - Verify user owns the site
   - Support timeRange query param
