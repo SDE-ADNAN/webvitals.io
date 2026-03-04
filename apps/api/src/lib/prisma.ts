@@ -13,9 +13,13 @@ import { env } from "../config/env";
  * In development, it reuses the client across hot reloads.
  */
 
-// Create PostgreSQL connection pool
+// Create PostgreSQL connection pool with configuration
 const pool = new Pool({
   connectionString: env.DATABASE_URL,
+  // Connection pool configuration
+  max: 10, // Maximum number of clients in the pool
+  idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+  connectionTimeoutMillis: 2000, // Return an error after 2 seconds if connection could not be established
 });
 
 // Create Prisma adapter
@@ -35,6 +39,9 @@ export const prisma =
     log: env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
     errorFormat: env.NODE_ENV === "development" ? "pretty" : "minimal",
   });
+
+// Export pool for shutdown handling
+export const connectionPool = pool;
 
 if (env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
@@ -79,16 +86,23 @@ export async function connectDatabase(): Promise<void> {
 /**
  * Disconnect from the database gracefully
  * Called during application shutdown
+ * Closes both Prisma client and the underlying connection pool
  */
 export async function disconnectDatabase(): Promise<void> {
   try {
+    // Disconnect Prisma client
     await prisma.$disconnect();
-    console.log("✅ Database disconnected successfully");
+    console.log("✅ Prisma client disconnected successfully");
+    
+    // Close the connection pool to release all connections
+    await connectionPool.end();
+    console.log("✅ Connection pool closed successfully");
   } catch (error) {
     console.error(
       "❌ Error disconnecting from database:",
       error instanceof Error ? error.message : error
     );
+    throw error; // Re-throw to ensure shutdown process is aware of the error
   }
 }
 
@@ -107,4 +121,68 @@ export async function testDatabaseConnection(): Promise<boolean> {
     );
     return false;
   }
+}
+
+/**
+ * Execute a database operation with retry logic and error logging
+ * Retries up to 3 times with exponential backoff on failure
+ * 
+ * @param operation - The database operation to execute
+ * @param context - Context information for logging (e.g., "createUser", "getSite")
+ * @returns The result of the operation
+ */
+export async function executeWithRetry<T>(
+  operation: () => Promise<T>,
+  context: string
+): Promise<T> {
+  const maxRetries = 3;
+  let retries = 0;
+
+  while (retries < maxRetries) {
+    try {
+      return await operation();
+    } catch (error) {
+      retries++;
+      const waitTime = Math.pow(2, retries) * 1000; // Exponential backoff: 2s, 4s, 8s
+
+      console.error(
+        `❌ Database operation "${context}" attempt ${retries}/${maxRetries} failed:`,
+        {
+          error: error instanceof Error ? error.message : error,
+          stack: error instanceof Error ? error.stack : undefined,
+          context,
+          timestamp: new Date().toISOString(),
+        }
+      );
+
+      if (retries < maxRetries) {
+        console.log(`⏳ Retrying "${context}" in ${waitTime / 1000} seconds...`);
+        await new Promise((resolve) => setTimeout(resolve, waitTime));
+      } else {
+        console.error(
+          `❌ Database operation "${context}" failed after ${maxRetries} attempts`
+        );
+        throw error; // Re-throw the original error after all retries exhausted
+      }
+    }
+  }
+
+  // This should never be reached, but TypeScript needs it
+  throw new Error(`Unexpected error in executeWithRetry for context: ${context}`);
+}
+
+/**
+ * Log database errors with context
+ * Provides structured error logging for debugging
+ * 
+ * @param error - The error that occurred
+ * @param context - Context information (operation name, user ID, etc.)
+ */
+export function logDatabaseError(error: unknown, context: Record<string, any>): void {
+  console.error("❌ Database error:", {
+    error: error instanceof Error ? error.message : error,
+    stack: error instanceof Error ? error.stack : undefined,
+    ...context,
+    timestamp: new Date().toISOString(),
+  });
 }
