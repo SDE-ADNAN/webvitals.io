@@ -10,15 +10,17 @@ module.exports = {
     '!src/**/*.test.ts',
     '!src/**/*.spec.ts',
     '!src/test-*.ts',
+    '!src/**/*.property.test.ts',
   ],
   coverageDirectory: 'coverage',
   verbose: true,
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  transformIgnorePatterns: [
-    'node_modules/(?!(uuid)/)',
-  ],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
-    '^.+\\.jsx?$': 'babel-jest',
+    '^.+\\.tsx?$': ['ts-jest', {
+      isolatedModules: true,
+    }],
+  },
+  moduleNameMapper: {
+    '^uuid$': '<rootDir>/src/test-utils/uuid-mock.ts',
   },
 };

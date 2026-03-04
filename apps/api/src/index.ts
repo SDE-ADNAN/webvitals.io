@@ -2,16 +2,19 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
+import swaggerUi from "swagger-ui-express";
 import { env } from "./config/env";
+import { swaggerSpec } from "./config/swagger";
 import {
   connectDatabase,
   disconnectDatabase,
-  testDatabaseConnection,
 } from "./lib/prisma";
 import authRoutes from "./routes/authRoutes";
 import siteRoutes from "./routes/siteRoutes";
 import metricRoutes from "./routes/metricRoutes";
 import alertRoutes from "./routes/alertRoutes";
+import healthRoutes from "./routes/healthRoutes";
+import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
 
@@ -39,12 +42,25 @@ app.use(
 );
 
 // Rate limiting: 100 requests per 15 minutes per IP
+const windowMs = 15 * 60 * 1000; // 15 minutes
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs,
   max: 100, // Limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try again later.",
+  message: {
+    error: "RateLimitError",
+    message: "Too many requests from this IP, please try again later."
+  },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  // Include Retry-After header when rate limit exceeded
+  handler: (req, res) => {
+    const retryAfter = Math.ceil(windowMs / 1000); // Convert to seconds
+    res.set('Retry-After', retryAfter.toString());
+    res.status(429).json({
+      error: "RateLimitError",
+      message: "Too many requests from this IP, please try again later."
+    });
+  },
   // Exclude health check from rate limiting
   skip: (req) => req.url === "/api/health",
 });
@@ -52,44 +68,52 @@ const limiter = rateLimit({
 // Apply rate limiting to all routes
 app.use(limiter);
 
+// API Documentation
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "WebVitals.io API Documentation",
+}));
+
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/sites", siteRoutes);
 app.use("/api/metrics", metricRoutes);
 app.use("/api/alerts", alertRoutes);
+app.use("/api/health", healthRoutes);
 
-// Health check endpoint with database connectivity check
-app.get("/api/health", async (req, res) => {
-  const dbConnected = await testDatabaseConnection();
-
-  if (!dbConnected) {
-    return res.status(503).json({
-      status: "error",
-      message: "Database is unreachable",
-      uptime: process.uptime(),
-      timestamp: new Date().toISOString(),
-    });
-  }
-
-  res.json({
-    status: "ok",
-    message: "API server is running",
-    database: "connected",
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString(),
-  });
-});
+// Global error handler (must be last middleware)
+app.use(errorHandler);
 
 // Graceful shutdown handler
 const gracefulShutdown = async (signal: string) => {
   console.log(`\n${signal} received. Starting graceful shutdown...`);
-  await disconnectDatabase();
-  process.exit(0);
+  
+  try {
+    // Close database connections
+    await disconnectDatabase();
+    console.log("✅ Graceful shutdown completed successfully");
+    process.exit(0);
+  } catch (error) {
+    console.error("❌ Error during graceful shutdown:", error);
+    process.exit(1);
+  }
 };
 
 // Register shutdown handlers
 process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+
+// Handle uncaught exceptions
+process.on("uncaughtException", (error) => {
+  console.error("❌ Uncaught Exception:", error);
+  gracefulShutdown("UNCAUGHT_EXCEPTION");
+});
+
+// Handle unhandled promise rejections
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("❌ Unhandled Rejection at:", promise, "reason:", reason);
+  gracefulShutdown("UNHANDLED_REJECTION");
+});
 
 // Start server with database connection
 async function startServer() {
