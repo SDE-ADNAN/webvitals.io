@@ -356,7 +356,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 8: Error Handling & Security
 
-- [ ] 8. Create global error handler middleware
+- [x] 8. Create global error handler middleware
   - Create src/middleware/errorHandler.ts
   - Handle validation errors (400)
   - Handle authentication errors (401)
@@ -369,17 +369,17 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Hide internal details in production
   - _Requirements: 19.1-19.5_
 
-- [ ] 8.1 Write property test for error response format
+- [x] 8.1 Write property test for error response format
   - **Property 5: Error Response Format**
   - For any error, API should return JSON with message and appropriate status code
   - **Validates: Requirements 19.1, 19.2**
 
-- [ ] 8.2 Write property test for production error sanitization
+- [x] 8.2 Write property test for production error sanitization
   - **Property 24: Production Error Sanitization**
   - For any unexpected error in production, return 500 without internal details
   - **Validates: Requirements 19.5, 27.3**
 
-- [ ] 8.3 Implement rate limiting
+- [x] 8.3 Implement rate limiting
   - Install express-rate-limit
   - Configure 100 requests per 15 minutes per IP
   - Apply to all routes except /api/health
@@ -387,17 +387,17 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Include Retry-After header in response
   - _Requirements: 22.1-22.5_
 
-- [ ] 8.4 Write property test for rate limit enforcement
+- [x] 8.4 Write property test for rate limit enforcement
   - **Property 8: Rate Limit Enforcement**
   - For any IP exceeding 100 requests per 15 minutes, return 429
   - **Validates: Requirements 22.2, 22.3**
 
-- [ ] 8.5 Write property test for Retry-After header
+- [x] 8.5 Write property test for Retry-After header
   - **Property 9: Retry-After Header on Rate Limit**
   - For any rate limit exceeded request, response should include Retry-After header
   - **Validates: Requirements 22.4**
 
-- [ ] 8.6 Configure request logging
+- [x] 8.6 Configure request logging
   - Configure morgan for HTTP logging
   - Use 'dev' format for development
   - Use 'combined' format for production
@@ -405,12 +405,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Exclude /api/health from logs
   - _Requirements: 23.1, 23.2_
 
-- [ ] 8.7 Write property test for request logging
+- [x] 8.7 Write property test for request logging
   - **Property 16: Request Logging**
   - For any HTTP request, system should log method, path, and timestamp
   - **Validates: Requirements 23.1**
 
-- [ ] 8.8 Write property test for error logging
+- [x] 8.8 Write property test for error logging
   - **Property 17: Error Logging with Stack Trace**
   - For any error, system should log error message and stack trace
   - **Validates: Requirements 19.3, 23.3**
@@ -419,7 +419,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 9: Health Check & Database Management
 
-- [ ] 9. Enhance health check endpoint
+- [x] 9. Enhance health check endpoint
   - Update GET /api/health endpoint
   - Check database connectivity with Prisma
   - Return 200 with status, uptime, version if healthy
@@ -427,12 +427,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Exclude from authentication and rate limiting
   - _Requirements: 24.1-24.5_
 
-- [ ] 9.1 Write property test for health check database verification
+- [x] 9.1 Write property test for health check database verification
   - **Property 10: Health Check Database Verification**
   - For any health check, if database unreachable, return 503
   - **Validates: Requirements 24.2, 24.3**
 
-- [ ] 9.2 Implement database connection management
+- [x] 9.2 Implement database connection management
   - Configure Prisma connection pool
   - Add graceful shutdown on SIGTERM/SIGINT
   - Close all connections on shutdown
@@ -440,7 +440,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Log database errors with context
   - _Requirements: 25.1-25.5_
 
-- [ ] 9.3 Write property test for database retry
+- [x] 9.3 Write property test for database retry
   - **Property 11: Database Connection Retry**
   - For any failed database query, retry up to 3 times with exponential backoff
   - **Validates: Requirements 25.3**
@@ -449,7 +449,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 10: API Response Standards
 
-- [ ] 10. Implement consistent response formatting
+- [x] 10. Implement consistent response formatting
   - Create src/utils/response.ts with response helpers
   - Ensure successful responses use 200 or 201 status codes
   - Wrap data in consistent JSON structure
@@ -457,12 +457,12 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Add pagination support (page, limit, total) for list endpoints
   - _Requirements: 26.1-26.5_
 
-- [ ] 10.1 Write property test for response status codes
+- [x] 10.1 Write property test for response status codes
   - **Property 12: Consistent Response Format**
   - For any successful API response, status code should be 200 or 201
   - **Validates: Requirements 26.1**
 
-- [ ] 10.2 Write property test for timestamp format
+- [x] 10.2 Write property test for timestamp format
   - **Property 13: ISO 8601 Timestamp Format**
   - For any response with timestamps, they should be in ISO 8601 format
   - **Validates: Requirements 26.5**
@@ -471,7 +471,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 11: Environment & Configuration
 
-- [ ] 11. Implement environment validation
+- [x] 11. Implement environment validation
   - Create src/config/env.ts for environment validation
   - Validate all required variables on startup
   - Fail fast with clear error messages if misconfigured
@@ -479,7 +479,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Load configuration from .env file
   - _Requirements: 27.1-27.5_
 
-- [ ] 11.1 Write property test for environment validation
+- [x] 11.1 Write property test for environment validation
   - **Property 14: Environment Variable Validation**
   - For any server startup, if required variables missing, fail with clear error
   - **Validates: Requirements 27.4, 27.5**
@@ -488,7 +488,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 12: Database Migrations
 
-- [ ] 12. Document migration workflow
+- [x] 12. Document migration workflow
   - Create migration documentation in README
   - Document how to create new migrations
   - Document how to apply migrations
@@ -496,7 +496,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test migration failure handling
   - _Requirements: 28.1-28.5_
 
-- [ ] 12.1 Write property test for migration rollback
+- [x] 12.1 Write property test for migration rollback
   - **Property 15: Migration Rollback on Failure**
   - For any failed migration, system should rollback transaction
   - **Validates: Requirements 28.3**
@@ -505,7 +505,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 13: Testing Infrastructure
 
-- [ ] 13. Set up Jest testing framework
+- [x] 13. Set up Jest testing framework
   - Install jest, @types/jest, ts-jest, supertest
   - Create jest.config.js for TypeScript
   - Configure test database (TEST_DATABASE_URL)
@@ -513,7 +513,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Add test scripts to package.json (test, test:watch, test:coverage)
   - _Requirements: 30.1-30.5_
 
-- [ ] 13.1 Write unit tests for authentication service
+- [x] 13.1 Write unit tests for authentication service
   - Test password hashing and comparison
   - Test JWT generation and verification
   - Test login validation logic
@@ -521,7 +521,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test duplicate email handling
   - _Requirements: 3.1-3.5, 4.1-4.5_
 
-- [ ] 13.2 Write integration tests for auth endpoints
+- [x] 13.2 Write integration tests for auth endpoints
   - Test POST /api/auth/register
   - Test POST /api/auth/login
   - Test GET /api/auth/me
@@ -529,7 +529,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test expired tokens
   - _Requirements: 3.1-5.5_
 
-- [ ] 13.3 Write integration tests for site endpoints
+- [x] 13.3 Write integration tests for site endpoints
   - Test GET /api/sites
   - Test POST /api/sites
   - Test GET /api/sites/:siteId
@@ -538,14 +538,14 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Test ownership verification
   - _Requirements: 6.1-10.5_
 
-- [ ] 13.4 Write integration tests for metrics endpoints
+- [x] 13.4 Write integration tests for metrics endpoints
   - Test POST /api/metrics
   - Test GET /api/metrics/:siteId
   - Test filtering by timeRange, deviceType, browser
   - Test summary calculation
   - _Requirements: 11.1-13.5_
 
-- [ ] 13.5 Write integration tests for alert endpoints
+- [x] 13.5 Write integration tests for alert endpoints
   - Test GET /api/alerts
   - Test POST /api/alerts
   - Test PUT /api/alerts/:alertId
@@ -557,7 +557,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 14: API Documentation
 
-- [ ] 14. Create API documentation
+- [x] 14. Create API documentation
   - Install swagger-jsdoc and swagger-ui-express
   - Create OpenAPI 3.0 specification
   - Document all endpoints with examples
@@ -571,7 +571,7 @@ This plan breaks down the backend API development into actionable tasks. Each ta
 
 ## Milestone 15: Frontend Integration
 
-- [ ] 15. Prepare for frontend integration
+- [x] 15. Prepare for frontend integration
   - Update CORS configuration for frontend URL
   - Verify all endpoints match frontend expectations
   - Test with frontend API client
@@ -579,14 +579,14 @@ This plan breaks down the backend API development into actionable tasks. Each ta
   - Document environment variables needed
   - _Requirements: Integration_
 
-- [ ] 15.1 Create React Query integration hooks
+- [x] 15.1 Create React Query integration hooks
   - Create example hooks for frontend team
   - Document authentication flow
   - Document error handling patterns
   - Provide TypeScript types for all responses
   - _Requirements: Integration_
 
-- [ ] 15.2 End-to-end integration testing
+- [x] 15.2 End-to-end integration testing
   - Test register → login → create site flow
   - Test site management CRUD operations
   - Test metrics submission and retrieval
