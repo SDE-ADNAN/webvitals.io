@@ -21,10 +21,12 @@ export const AlertCondition = z.enum(["greater_than", "less_than"], {
  */
 export const createAlertSchema = z.object({
   siteId: z
-    .string({
+    .number({
       required_error: "Site ID is required",
+      invalid_type_error: "Site ID must be a number",
     })
-    .min(1, "Site ID is required"),
+    .int("Site ID must be an integer")
+    .positive("Site ID must be a positive number"),
   metricType: MetricType,
   threshold: z
     .number({

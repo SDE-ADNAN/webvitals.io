@@ -26,7 +26,7 @@ export async function createAlert(
 ): Promise<AlertResponse> {
   // First verify the site exists and user owns it
   const site = await prisma.site.findUnique({
-    where: { siteId: data.siteId },
+    where: { id: data.siteId },
   });
 
   if (!site) {
@@ -45,7 +45,7 @@ export async function createAlert(
   const alert = await prisma.alert.create({
     data: {
       userId,
-      siteId: site.id,
+      siteId: data.siteId,
       metricType: data.metricType,
       threshold: data.threshold,
       condition: data.condition,
